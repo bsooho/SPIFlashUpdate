@@ -1,5 +1,5 @@
 //
-// Flash Memory W25Q64 Access Library for RaspberryPi
+// Flash Memory IS25LP256 Access Library for RaspberryPi
 //
 
 #include <stdio.h>
@@ -10,7 +10,7 @@
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 
-#include "W25Q64.h"
+#include "IS25LP256.h"
 
 //#define MAX_BLOCKSIZE        128    // ブロック総数
 //#define MAX_SECTORSIZE       2048   // 総セクタ数
@@ -63,9 +63,9 @@ void spcDump(char *id,int rc, uint8_t *data,int len) {
 }
 
 //
-// フラッシュメモリ W25Q64の利用開始
+// フラッシュメモリ IS25LP256の利用開始
 // 
-void W25Q64_begin(uint8_t spich) {
+void IS25LP256_begin(uint8_t spich) {
     _spich = spich;
 }
 
@@ -73,7 +73,7 @@ void W25Q64_begin(uint8_t spich) {
 // ステータスレジスタ1の値取得
 // 戻り値: ステータスレジスタ1の値
 //
-uint8_t W25Q64_readStatusReg1(void) {
+uint8_t IS25LP256_readStatusReg1(void) {
   unsigned char data[2];
   int rc;
   UNUSED(rc);
@@ -87,7 +87,7 @@ uint8_t W25Q64_readStatusReg1(void) {
 // ステータスレジスタ2の値取得
 // 戻り値: ステータスレジスタ2の値
 //
-uint8_t W25Q64_readStatusReg2(void) {
+uint8_t IS25LP256_readStatusReg2(void) {
   unsigned char data[2];
   int rc;
   UNUSED(rc);
@@ -101,7 +101,7 @@ uint8_t W25Q64_readStatusReg2(void) {
 // JEDEC ID(Manufacture, Memory Type,Capacity)の取得
 // d(out) :Manufacture, Memory Type,Capacityの３バイトを格納する
 //
-void W25Q64_readManufacturer(uint8_t* d) {
+void IS25LP256_readManufacturer(uint8_t* d) {
   unsigned char data[4];
   int rc;
   UNUSED(rc);
@@ -116,7 +116,7 @@ void W25Q64_readManufacturer(uint8_t* d) {
 // Unique IDの取得
 // d(out): Unique ID 8バイトを返す  
 //
-void W25Q64_readUniqieID(uint8_t* d) {
+void IS25LP256_readUniqieID(uint8_t* d) {
   unsigned char data[13];
   int rc;
   UNUSED(rc);
@@ -131,7 +131,7 @@ void W25Q64_readUniqieID(uint8_t* d) {
 // 書込み等の処理中チェック
 // 戻り値: true:書き込み中 、false:アイドル中
 //
-bool W25Q64_IsBusy(void) {
+bool IS25LP256_IsBusy(void) {
   unsigned char data[2];
   int rc;
   UNUSED(rc);
@@ -147,7 +147,7 @@ bool W25Q64_IsBusy(void) {
 //
 //　パワーダウン指定 
 //
-void W25Q64_powerDown(void) {
+void IS25LP256_powerDown(void) {
   unsigned char data[1];
   int rc;
   UNUSED(rc);
@@ -159,7 +159,7 @@ void W25Q64_powerDown(void) {
 //
 // 書込み許可設定
 //
-void W25Q64_WriteEnable(void) {
+void IS25LP256_WriteEnable(void) {
   unsigned char data[1];
   int rc;
   UNUSED(rc);
@@ -171,7 +171,7 @@ void W25Q64_WriteEnable(void) {
 //
 // 書込み禁止設定
 //
-void W25Q64_WriteDisable(void) {
+void IS25LP256_WriteDisable(void) {
   unsigned char data[1];
   int rc;
   UNUSED(rc);
@@ -185,7 +185,7 @@ void W25Q64_WriteDisable(void) {
 // addr(in): 読込開始アドレス (24ビット 0x000000 - 0xFFFFFF)
 // n(in):読込データ数
 //
-uint16_t W25Q64_read(uint32_t addr,uint8_t *buf,uint16_t n){ 
+uint16_t IS25LP256_read(uint32_t addr,uint8_t *buf,uint16_t n){ 
   unsigned char *data;
   int rc;
 
@@ -206,7 +206,7 @@ uint16_t W25Q64_read(uint32_t addr,uint8_t *buf,uint16_t n){
 // addr(in): 読込開始アドレス (24ビット 0x000000 - 0xFFFFFF)
 // n(in):読込データ数
 //
-uint16_t W25Q64_fastread(uint32_t addr,uint8_t *buf,uint16_t n) {
+uint16_t IS25LP256_fastread(uint32_t addr,uint8_t *buf,uint16_t n) {
   unsigned char *data;
   int rc;
 
@@ -232,14 +232,14 @@ uint16_t W25Q64_fastread(uint32_t addr,uint8_t *buf,uint16_t n) {
 //         アドレス24ビットのうち上位12ビットがセクタ番号に相当する。
 //         下位12ビットはセクタ内アドレスとなる。
 //
-bool W25Q64_eraseSector(uint16_t sect_no, bool flgwait) {
+bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait) {
   unsigned char data[4];
   int rc;
   UNUSED(rc);
   uint32_t addr = sect_no;
   addr<<=12;
 
-  W25Q64_WriteEnable();
+  IS25LP256_WriteEnable();
   data[0] = CMD_SECTOR_ERASE;
   data[1] = (addr>>16) & 0xff;
   data[2] = (addr>>8) & 0xff;
@@ -247,7 +247,7 @@ bool W25Q64_eraseSector(uint16_t sect_no, bool flgwait) {
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
  
   // 処理待ち
-  while(W25Q64_IsBusy() & flgwait) {
+  while(IS25LP256_IsBusy() & flgwait) {
     delay(10);
   }
   return true;
@@ -262,7 +262,7 @@ bool W25Q64_eraseSector(uint16_t sect_no, bool flgwait) {
 //         アドレス24ビットのうち上位8ビットがブロック番号に相当する。
 //         下位16ビットはブロック内アドレスとなる。
 //
-bool W25Q64_erase64Block(uint16_t blk_no, bool flgwait) {
+bool IS25LP256_erase64Block(uint16_t blk_no, bool flgwait) {
   unsigned char data[4];
   int rc;
   UNUSED(rc);
@@ -270,7 +270,7 @@ bool W25Q64_erase64Block(uint16_t blk_no, bool flgwait) {
   addr<<=16;
 
   // 書込み許可設定
-  W25Q64_WriteEnable();
+  IS25LP256_WriteEnable();
 
   data[0] = CMD_BLOCK_ERASE64KB;
   data[1] = (addr>>16) & 0xff;
@@ -279,7 +279,7 @@ bool W25Q64_erase64Block(uint16_t blk_no, bool flgwait) {
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
  
   // 処理待ち
-  while(W25Q64_IsBusy() & flgwait) {
+  while(IS25LP256_IsBusy() & flgwait) {
     delay(50);
   }
   return true;
@@ -294,7 +294,7 @@ bool W25Q64_erase64Block(uint16_t blk_no, bool flgwait) {
 //         アドレス24ビットのうち上位9ビットがブロック番号に相当する。
 //         下位15ビットはブロック内アドレスとなる。
 //
-bool W25Q64_erase32Block(uint16_t blk_no, bool flgwait) {
+bool IS25LP256_erase32Block(uint16_t blk_no, bool flgwait) {
   unsigned char data[4];
   int rc;
   UNUSED(rc);
@@ -302,7 +302,7 @@ bool W25Q64_erase32Block(uint16_t blk_no, bool flgwait) {
   addr<<=15;
 
   // 書込み許可設定
-  W25Q64_WriteEnable();  
+  IS25LP256_WriteEnable();  
 
   data[0] = CMD_BLOCK_ERASE32KB;
   data[1] = (addr>>16) & 0xff;
@@ -311,7 +311,7 @@ bool W25Q64_erase32Block(uint16_t blk_no, bool flgwait) {
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
  
   // 処理待ち
-  while(W25Q64_IsBusy() & flgwait) {
+  while(IS25LP256_IsBusy() & flgwait) {
     delay(50);
   }
   return true;
@@ -323,19 +323,19 @@ bool W25Q64_erase32Block(uint16_t blk_no, bool flgwait) {
 // 戻り値: true:正常終了 false:失敗
 //   補足: データシートでは消去に通常 15s 、最大30sかかると記載されている
 //
-bool W25Q64_eraseAll(bool flgwait) {
+bool IS25LP256_eraseAll(bool flgwait) {
   unsigned char data[1];
   int rc;
   UNUSED(rc);
 
   // 書込み許可設定
-  W25Q64_WriteEnable();  
+  IS25LP256_WriteEnable();  
 
   data[0] = CMD_CHIP_ERASE;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
 
   // 処理待ち
-  while(W25Q64_IsBusy() & flgwait) {
+  while(IS25LP256_IsBusy() & flgwait) {
     delay(500);
   }
   return true;
@@ -348,7 +348,7 @@ bool W25Q64_eraseAll(bool flgwait) {
 // data(in)    : 書込みデータ格納アドレス
 // n(in)       : 書込みバイト数(0～256)
 //
-uint16_t W25Q64_pageWrite(uint16_t sect_no, uint16_t inaddr, uint8_t* buf, uint16_t n) {
+uint16_t IS25LP256_pageWrite(uint16_t sect_no, uint16_t inaddr, uint8_t* buf, uint16_t n) {
   if (n > 256) return 0;
   unsigned char *data;
   int rc;
@@ -358,8 +358,8 @@ uint16_t W25Q64_pageWrite(uint16_t sect_no, uint16_t inaddr, uint8_t* buf, uint1
   addr += inaddr;
 
   // 書込み許可設定
-  W25Q64_WriteEnable();  
-  if (W25Q64_IsBusy()) return 0;  
+  IS25LP256_WriteEnable();  
+  if (IS25LP256_IsBusy()) return 0;  
 
   data = (unsigned char*)malloc(n+4);
   data[0] = CMD_PAGE_PROGRAM;
@@ -371,7 +371,7 @@ uint16_t W25Q64_pageWrite(uint16_t sect_no, uint16_t inaddr, uint8_t* buf, uint1
   //spcDump("pageWrite",rc,buf,n);
 
   // 処理待ち
-  while(W25Q64_IsBusy()) ;
+  while(IS25LP256_IsBusy()) ;
   free(data);
   return rc;
 }
