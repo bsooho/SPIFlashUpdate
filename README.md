@@ -9,6 +9,7 @@ https://github.com/nopnop2002/Raspberry-W25Q64.git
 
 # Software requirement
 - WiringPi Library
+
  This project uses the wiringPiSPISetup() function to initialize SPI, and use /dev/spidev0.0.
 
 ---
