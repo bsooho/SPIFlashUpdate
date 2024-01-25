@@ -1,26 +1,26 @@
 //
-// SPI シリアルフラッシュメモリ W25Q64 操作検証プログラム
-// W25Q64のメモリ領域構造
-//   総バイト数 8388608
-//   メモリ空間 24ビットアドレス指定 0x00000 - 0x7FFFFF 
-//   ブロック数 128 (64KB/ブロック)
-//   セクタ数 2048  ( 4KB/セクタ)
-//   総セクタ数 2048
+// SPI Serial flash 메모리 IS25LP256 동작검증 프로그램
+// IS25LP256의 메모리 영역 구조
+//    총 바이트 수 33554432 (256Mbit)
+//    메모리 공간 24비트 주소 지정 0x0000000 - 0x1FFFFFFF 
+//    총 블록 수 512 (64KB/블록, 16섹터/블록)
+//    총 섹터 수 8192 (4KB/섹터)
+//
 
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
 #include <wiringPiSPI.h>
-#include "W25Q64.h"
+#include "IS25LP256.h"
 
-#define SPI_CHANNEL 0 // /dev/spidev0.0
+#define SPI_CHANNEL 0   // /dev/spidev0.0
 //#define SPI_CHANNEL 1 // /dev/spidev0.1
 
 //
-// 書込みデータのダンプリスト
-// dt(in) : データ格納先頭アドレス
-// n(in)  : 表示データ数
+// 쓰기 데이터 덤프 목록 보여주기
+// dt(in) : 데이터 저장 시작 주소
+// n(in)  : 표시 데이터 개수
 //
 void dump(uint8_t *dt, uint32_t n) {
   uint16_t clm = 0;
@@ -63,101 +63,101 @@ void dump(uint8_t *dt, uint32_t n) {
 
 int main() {
     uint8_t jedc[3];      // JEDEC-ID
-    uint8_t buf[256];     // 取得データ
-    uint8_t wdata[26];    // 書込みデータ
+    uint8_t buf[256];     // 취득 데이터
+    uint8_t wdata[26];    // 데이터 쓰기
     uint8_t i;
     
-    uint16_t n;           // 取得データ数
+    uint16_t n;           // 취득 데이터 수
 
-    // SPI channel 0 を 2MHz で開始。
+    // SPI channel 0을 2MHz로 시작
     // Start SPI channel 0 with 2MHz
     if (wiringPiSPISetup(SPI_CHANNEL, 2000000) < 0) {
       printf("SPISetup failed:\n");
     }
     
-    // フラッシュメモリ利用開始
+    // 플래시 메모리 사용 시작
     // Start Flush Memory
-    W25Q64_begin(SPI_CHANNEL);
+    IS25LP256_begin(SPI_CHANNEL);
     
-    // JEDEC IDの取得テスト
+    // JEDEC IDの 획득 테스트
     // JEDEC ID Get
-    //W25Q64_readManufacturer(buf);
-    W25Q64_readManufacturer(jedc);
+    //IS25LP256_readManufacturer(buf);
+    IS25LP256_readManufacturer(jedc);
     printf("JEDEC ID : ");
     for (i=0; i< 3; i++) {
       printf("%x ",jedc[i]);
     }
     printf("\n");
     
-    // Unique IDの取得テスト
+    // Unique ID 획득 테스트
     // Unique ID Get
-    W25Q64_readUniqieID(buf);
+    IS25LP256_readUniqieID(buf);
     printf("Unique ID : ");
     for (i=0; i< 8; i++) {
       printf("%x ",buf[i]);
     }
     printf("\n");
     
-    // データの読み込み(アドレス0から256バイト取得)
+    // 데이터 불러오기(주소 0에서 256바이트 가져오기)
     // Read 256 byte data from Address=0
     memset(buf,0,256);
-    n =  W25Q64_read(0, buf, 256);
+    n =  IS25LP256_read(0, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
-    // 高速データの読み込み(アドレス0から256バイト取得)
+    // 고속 데이터 로딩 (주소 0에서 256바이트까지 획득)
     // First read 256 byte data from Address=0
     memset(buf,0,256);
-    n =  W25Q64_fastread(0, buf, 256);
+    n =  IS25LP256_fastread(0, buf, 256);
     printf("Fast Read Data: n=%d\n",n);
     dump(buf,256);
 
-    // セクタ単位の削除
+    // 섹터 단위 삭제
     // Erase data by Sector
-    n = W25Q64_eraseSector(0,true);
+    n = IS25LP256_eraseSector(0,true);
     printf("Erase Sector(0): n=%d\n",n);
     memset(buf,0,256);
-    n =  W25Q64_read (0, buf, 256);
+    n =  IS25LP256_read (0, buf, 256);
     dump(buf,256);
  
-    // データ書き込みテスト
+    // 데이터 쓰기 테스트
     // Write data to Sector=0 Address=10
     for (i=0; i < 26;i++) {
       wdata[i]='A'+i; // A-Z     
     }  
-    n =  W25Q64_pageWrite(0, 10, wdata, 26);
+    n =  IS25LP256_pageWrite(0, 10, wdata, 26);
     printf("page_write(0,10,d,26): n=%d\n",n);
 
-    // データの読み込み(アドレス0から256バイト取得)
+    // 데이터 불러오기 (주소 0에서 256바이트 데이터 가져오기)
     // Read 256 byte data from Address=0
     memset(buf,0,256);
-    n =  W25Q64_read(0, buf, 256);
+    n =  IS25LP256_read(0, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
-    // データ書き込みテスト
+    // 데이터 쓰기 테스트
     // Write data to Sector=0 Address=0
     for (i=0; i < 10;i++) {
       wdata[i]='0'+i; // 0-9     
     }  
-    n =  W25Q64_pageWrite(0, 0, wdata, 10);
+    n =  IS25LP256_pageWrite(0, 0, wdata, 10);
     printf("page_write(0,0,d,10): n=%d\n",n);
 
-    // 高速データの読み込み(アドレス0から256バイト取得)
+    // 고속 데이터 읽기(주소 0에서 256바이트 가져 오기)
     // First read 256 byte data from Address=0
     memset(buf,0,256);
-    n =  W25Q64_fastread(0,buf, 256);
+    n =  IS25LP256_fastread(0,buf, 256);
     printf("Fast Read Data: n=%d\n",n);
     dump(buf,256);
 
-    // ステータスレジスタ1の取得
+    // 상태 레지스터1 가져오기
     // Get fron Status Register1
-    buf[0] = W25Q64_readStatusReg1();
+    buf[0] = IS25LP256_readStatusReg1();
     printf("Status Register-1: %x\n",buf[0]);
 
-    // ステータスレジスタ2の取得
+    // 상태 레지스터2 가져오기
     // Get fron Status Register2
-    buf[0] = W25Q64_readStatusReg2();
+    buf[0] = IS25LP256_readStatusReg2();
     printf("Status Register-2: %x\n",buf[0]);
     return 0;
 }
