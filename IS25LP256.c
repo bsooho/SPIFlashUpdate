@@ -12,37 +12,37 @@
 
 #include "IS25LP256.h"
 
-//#define MAX_BLOCKSIZE        128    // ブロック総数
-//#define MAX_SECTORSIZE       2048   // 総セクタ数
+//#define MAX_BLOCKSIZE        128    // 총 블록 개수
+//#define MAX_SECTORSIZE       2048   // 총 섹터 수
 
 #define CMD_WRIRE_ENABLE      0x06
 #define CMD_WRITE_DISABLE     0x04
 #define CMD_READ_STATUS_R1    0x05
 #define CMD_READ_STATUS_R2    0x35
-#define CMD_WRITE_STATUS_R    0x01 // 未実装
+#define CMD_WRITE_STATUS_R    0x01 // 미실행
 #define CMD_PAGE_PROGRAM      0x02
-#define CMD_QUAD_PAGE_PROGRAM 0x32 // 未実装
+#define CMD_QUAD_PAGE_PROGRAM 0x32 // 미실행
 #define CMD_BLOCK_ERASE64KB   0xd8
 #define CMD_BLOCK_ERASE32KB   0x52
 #define CMD_SECTOR_ERASE      0x20
 #define CMD_CHIP_ERASE        0xC7
-#define CMD_ERASE_SUPPEND     0x75 // 未実装
-#define CMD_ERASE_RESUME      0x7A // 未実装
+#define CMD_ERASE_SUPPEND     0x75 // 미실행
+#define CMD_ERASE_RESUME      0x7A // 미실행
 #define CMD_POWER_DOWN        0xB9
-#define CMD_HIGH_PERFORM_MODE 0xA3 // 未実装
-#define CMD_CNT_READ_MODE_RST 0xFF // 未実装
-#define CMD_RELEASE_PDOWN_ID  0xAB // 未実装
+#define CMD_HIGH_PERFORM_MODE 0xA3 // 미실행
+#define CMD_CNT_READ_MODE_RST 0xFF // 미실행
+#define CMD_RELEASE_PDOWN_ID  0xAB // 미실행
 #define CMD_MANUFACURER_ID    0x90
 #define CMD_READ_UNIQUE_ID    0x4B
 #define CMD_JEDEC_ID          0x9f
 
 #define CMD_READ_DATA         0x03
 #define CMD_FAST_READ         0x0B
-#define CMD_READ_DUAL_OUTPUT  0x3B // 未実装
-#define CMD_READ_DUAL_IO      0xBB // 未実装
-#define CMD_READ_QUAD_OUTPUT  0x6B // 未実装
-#define CMD_READ_QUAD_IO      0xEB // 未実装
-#define CMD_WORD_READ         0xE3 // 未実装
+#define CMD_READ_DUAL_OUTPUT  0x3B // 미실행
+#define CMD_READ_DUAL_IO      0xBB // 미실행
+#define CMD_READ_QUAD_OUTPUT  0x6B // 미실행
+#define CMD_READ_QUAD_IO      0xEB // 미실행
+#define CMD_WORD_READ         0xE3 // 미실행
 
 #define SR1_BUSY_MASK	0x01
 #define SR1_WEN_MASK	0x02
@@ -63,15 +63,15 @@ void spcDump(char *id,int rc, uint8_t *data,int len) {
 }
 
 //
-// フラッシュメモリ IS25LP256の利用開始
+// 플래시 메모리 IS25LP256 사용 시작
 // 
 void IS25LP256_begin(uint8_t spich) {
     _spich = spich;
 }
 
 //
-// ステータスレジスタ1の値取得
-// 戻り値: ステータスレジスタ1の値
+// 상태 레지스터 1의 값 가져오기
+// 반환 값: 상태 레지스터 1의 값
 //
 uint8_t IS25LP256_readStatusReg1(void) {
   unsigned char data[2];
@@ -84,8 +84,8 @@ uint8_t IS25LP256_readStatusReg1(void) {
 }
 
 //
-// ステータスレジスタ2の値取得
-// 戻り値: ステータスレジスタ2の値
+// 상태 레지스터 2의 값 가져오기
+// 반환 값: 상태 레지스터 2의 값
 //
 uint8_t IS25LP256_readStatusReg2(void) {
   unsigned char data[2];
@@ -98,8 +98,8 @@ uint8_t IS25LP256_readStatusReg2(void) {
 }
 
 //
-// JEDEC ID(Manufacture, Memory Type,Capacity)の取得
-// d(out) :Manufacture, Memory Type,Capacityの３バイトを格納する
+// JEDEC ID(Manufacture, Memory Type, Capacity)를 취득한다.
+// d(out) : Manufacture, Memory Type, Capacity의 바이트 수를 저장한다.
 //
 void IS25LP256_readManufacturer(uint8_t* d) {
   unsigned char data[4];
@@ -113,8 +113,8 @@ void IS25LP256_readManufacturer(uint8_t* d) {
 }
 
 //
-// Unique IDの取得
-// d(out): Unique ID 8バイトを返す  
+// Unique ID 가져오기
+// d(out): Unique ID 8바이트를 반환합니다.
 //
 void IS25LP256_readUniqieID(uint8_t* d) {
   unsigned char data[13];
@@ -128,8 +128,8 @@ void IS25LP256_readUniqieID(uint8_t* d) {
 }
 
 //
-// 書込み等の処理中チェック
-// 戻り値: true:書き込み中 、false:アイドル中
+// 쓰기 등 처리 중 체크
+// 반환값: true: 쓰기 중, false: 유휴 상태
 //
 bool IS25LP256_IsBusy(void) {
   unsigned char data[2];
@@ -145,7 +145,7 @@ bool IS25LP256_IsBusy(void) {
 }
 
 //
-//　パワーダウン指定 
+// 파워 다운 지정
 //
 void IS25LP256_powerDown(void) {
   unsigned char data[1];
@@ -157,7 +157,7 @@ void IS25LP256_powerDown(void) {
 }
 
 //
-// 書込み許可設定
+// 쓰기 권한 설정
 //
 void IS25LP256_WriteEnable(void) {
   unsigned char data[1];
@@ -169,7 +169,7 @@ void IS25LP256_WriteEnable(void) {
 }
 
 //
-// 書込み禁止設定
+// 쓰기 금지 설정
 //
 void IS25LP256_WriteDisable(void) {
   unsigned char data[1];
@@ -181,9 +181,9 @@ void IS25LP256_WriteDisable(void) {
 }
 
 //
-// データの読み込み
-// addr(in): 読込開始アドレス (24ビット 0x000000 - 0xFFFFFF)
-// n(in):読込データ数
+// 데이터 불러오기
+// addr(in): 읽기 시작 주소 (24비트 0x000000 - 0xFFFFFFFF)
+// n(in): 읽기 데이터 수
 //
 uint16_t IS25LP256_read(uint32_t addr,uint8_t *buf,uint16_t n){ 
   unsigned char *data;
@@ -202,9 +202,9 @@ uint16_t IS25LP256_read(uint32_t addr,uint8_t *buf,uint16_t n){
 }
 
 //
-// 高速データの読み込み
-// addr(in): 読込開始アドレス (24ビット 0x000000 - 0xFFFFFF)
-// n(in):読込データ数
+// 고속 데이터 읽기
+// addr(in): 읽기 시작 주소 (24비트 0x000000 - 0xFFFFFFFF)
+// n(in): 읽기 데이터 수
 //
 uint16_t IS25LP256_fastread(uint32_t addr,uint8_t *buf,uint16_t n) {
   unsigned char *data;
@@ -224,13 +224,13 @@ uint16_t IS25LP256_fastread(uint32_t addr,uint8_t *buf,uint16_t n) {
 }
 
 //
-// セクタ単位消去(4kb空間単位でデータの消去を行う)
-// sect_no(in) セクタ番号(0 - 4095)
-// flgwait(in) true:処理待ちを行う false:待ち無し
-// 戻り値: true:正常終了 false:失敗
-//  補足： データシートでは消去に通常 30ms 、最大400msかかると記載されている
-//         アドレス24ビットのうち上位12ビットがセクタ番号に相当する。
-//         下位12ビットはセクタ内アドレスとなる。
+// 섹터 단위 지우기(4kb 공간 단위로 데이터 지우기)
+// sect_no(in) 섹터 번호(0 - 4095)
+// flgwait(in) true: 처리 대기 false: 대기 없음
+// 반환값: true:정상 종료 false:실패
+// 추가: 데이터시트에는 지우기에 보통 30ms, 최대 400ms가 걸린다고 명시되어 있다.
+// 주소 24비트 중 상위 12비트가 섹터 번호에 해당한다.
+// 하위 12비트는 섹터 내 주소가 된다.
 //
 bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait) {
   unsigned char data[4];
@@ -246,7 +246,7 @@ bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait) {
   data[3] = addr & 0xff;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
  
-  // 処理待ち
+  // 처리 대기
   while(IS25LP256_IsBusy() & flgwait) {
     delay(10);
   }
@@ -254,13 +254,13 @@ bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait) {
 }
 
 //
-// 64KBブロック単位消去(64kb空間単位でデータの消去を行う)
-// blk_no(in) ブロック番号(0 - 255)
-// flgwait(in) true:処理待ちを行う false:待ち無し
-// 戻り値: true:正常終了 false:失敗
-//   補足: データシートでは消去に通常 150ms 、最大1000msかかると記載されている
-//         アドレス24ビットのうち上位8ビットがブロック番号に相当する。
-//         下位16ビットはブロック内アドレスとなる。
+// 64KB 블록 단위 지우기(64kb 공간 단위로 데이터 지우기)
+// blk_no(in) 블록 번호(0 - 255)
+// flgwait(in) true: 처리 대기 false: 대기 없음
+// 반환값: true:정상 종료 false:실패
+// 보충: 데이터시트에는 지우기에 보통 150ms, 최대 1000ms가 걸린다고 명시되어 있다.
+// 주소 24비트 중 상위 8비트가 블록 번호에 해당한다.
+// 하위 16비트는 블록 내 주소가 된다.
 //
 bool IS25LP256_erase64Block(uint16_t blk_no, bool flgwait) {
   unsigned char data[4];
@@ -269,7 +269,7 @@ bool IS25LP256_erase64Block(uint16_t blk_no, bool flgwait) {
   uint32_t addr = blk_no;
   addr<<=16;
 
-  // 書込み許可設定
+  // 쓰기 권한 설정
   IS25LP256_WriteEnable();
 
   data[0] = CMD_BLOCK_ERASE64KB;
@@ -278,7 +278,7 @@ bool IS25LP256_erase64Block(uint16_t blk_no, bool flgwait) {
   data[3] = addr & 0xff;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
  
-  // 処理待ち
+  // 처리 대기
   while(IS25LP256_IsBusy() & flgwait) {
     delay(50);
   }
@@ -286,13 +286,13 @@ bool IS25LP256_erase64Block(uint16_t blk_no, bool flgwait) {
 }
 
 //
-// 32KBブロック単位消去(32kb空間単位でデータの消去を行う)
-// blk_no(in) ブロック番号(0 - 511)
-// flgwait(in) true:処理待ちを行う false:待ち無し
-// 戻り値: true:正常終了 false:失敗
-//   補足: データシートでは消去に通常 120ms 、最大800msかかると記載されている
-//         アドレス24ビットのうち上位9ビットがブロック番号に相当する。
-//         下位15ビットはブロック内アドレスとなる。
+// 32KB 블록 단위 지우기(32kb 공간 단위로 데이터 지우기)
+// blk_no(in) 블록 번호(0 - 511)
+// flgwait(in) true:처리 대기 false:대기 없음
+// 반환값: true:정상 종료 false:실패
+// 추가: 데이터시트에는 지우기에 보통 120ms, 최대 800ms가 걸린다고 명시되어 있다.
+// 주소 24비트 중 상위 9비트가 블록 번호에 해당한다.
+// 하위 15 비트는 블록 내 주소가 된다.
 //
 bool IS25LP256_erase32Block(uint16_t blk_no, bool flgwait) {
   unsigned char data[4];
@@ -301,7 +301,7 @@ bool IS25LP256_erase32Block(uint16_t blk_no, bool flgwait) {
   uint32_t addr = blk_no;
   addr<<=15;
 
-  // 書込み許可設定
+  // 쓰기 권한 설정
   IS25LP256_WriteEnable();  
 
   data[0] = CMD_BLOCK_ERASE32KB;
@@ -310,7 +310,7 @@ bool IS25LP256_erase32Block(uint16_t blk_no, bool flgwait) {
   data[3] = addr & 0xff;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
  
-  // 処理待ち
+  // 처리 대기
   while(IS25LP256_IsBusy() & flgwait) {
     delay(50);
   }
@@ -318,23 +318,23 @@ bool IS25LP256_erase32Block(uint16_t blk_no, bool flgwait) {
 }
 
 //
-// 全領域の消去
-// flgwait(in) true:処理待ちを行う false:待ち無し
-// 戻り値: true:正常終了 false:失敗
-//   補足: データシートでは消去に通常 15s 、最大30sかかると記載されている
+// 전체 영역 지우기
+// flgwait(in) true:처리 대기 false:대기 없음
+// 반환값: true:정상 종료 false:실패
+// 추가: 데이터시트에는 지우는데 보통 15s, 최대 30s가 걸린다고 명시되어 있다.
 //
 bool IS25LP256_eraseAll(bool flgwait) {
   unsigned char data[1];
   int rc;
   UNUSED(rc);
 
-  // 書込み許可設定
+  // 쓰기 권한 설정
   IS25LP256_WriteEnable();  
 
   data[0] = CMD_CHIP_ERASE;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
 
-  // 処理待ち
+  // 처리 대기
   while(IS25LP256_IsBusy() & flgwait) {
     delay(500);
   }
@@ -342,11 +342,11 @@ bool IS25LP256_eraseAll(bool flgwait) {
 }
 
 //
-// データの書き込み
-// sect_no(in) : セクタ番号(0x000 - 0xFFF) 
-// inaddr(in)  : セクタ内アドレス(0x000-0xFFF)
-// data(in)    : 書込みデータ格納アドレス
-// n(in)       : 書込みバイト数(0～256)
+// 데이터 쓰기
+// sect_no(in) : 섹터 번호(0x000 - 0xFFF) 
+// inaddr(in) : 섹터 내 주소(0x000 - 0xFFF)
+// data(in) : 쓰기 데이터 저장 주소
+// n(in) : 쓰기 바이트 수(0~256)
 //
 uint16_t IS25LP256_pageWrite(uint16_t sect_no, uint16_t inaddr, uint8_t* buf, uint16_t n) {
   if (n > 256) return 0;
@@ -357,7 +357,7 @@ uint16_t IS25LP256_pageWrite(uint16_t sect_no, uint16_t inaddr, uint8_t* buf, ui
   addr<<=12;
   addr += inaddr;
 
-  // 書込み許可設定
+  // 쓰기 권한 설정
   IS25LP256_WriteEnable();  
   if (IS25LP256_IsBusy()) return 0;  
 
@@ -370,9 +370,8 @@ uint16_t IS25LP256_pageWrite(uint16_t sect_no, uint16_t inaddr, uint8_t* buf, ui
   rc = wiringPiSPIDataRW (_spich,data,n+4);
   //spcDump("pageWrite",rc,buf,n);
 
-  // 処理待ち
+  // 처리 대기
   while(IS25LP256_IsBusy()) ;
   free(data);
   return rc;
 }
-
