@@ -83,7 +83,7 @@ uint16_t IS25LP256_pageWrite(uint16_t sect_no, uint16_t inaddr, uint8_t* data, u
 
 |Device|# of Bytes|Address range|# of 4K-Sectors|# of 32K-Blocks|# of 64K-Blocks|JEDEC ID|
 |:---|:---|:---|:---|:---|:---|:---|
-|IS25LP256|8M|0x7FFFFF|8192|1024|512|EF-40-17|
+|IS25LP256|8M|0x7FFFFF|8192|1024|512|9D-60-19|
 
 - Normal 80MHz  clock operation   
 - Upto 166MHz clock operation  
