@@ -1,6 +1,6 @@
 # Raspberry PI 4 Model B - IS25LP256
 
-SPI Flash Memory IS25LP256 Access Library for RaspberryPi
+SPI Flash Memory IS25LP256 Access Library for RaspberryPi 4B
 
 I ported from here.
 
