@@ -15,26 +15,27 @@
 #include <wiringPiSPI.h>
 #include "IS25LP256.h"
 
-#define SPI_CHANNEL 0   // /dev/spidev0.0
-//#define SPI_CHANNEL 1 // /dev/spidev0.1
+#define SPI_CHANNEL 0   // /dev/spidev0.0 사용
+//#define SPI_CHANNEL 1 // /dev/spidev0.1 사용
 
 //
 // 쓰기 데이터 덤프 목록 보여주기
-// dt(in) : 데이터 저장 시작 주소
-// n(in)  : 표시 데이터 개수
+// dt(in) : 데이터 저장 시작 주소 (포인터)
+// n(in)  : 표시할 데이터 개수
 //
 void dump(uint8_t *dt, uint32_t n) {
   uint16_t clm = 0;
   uint8_t data;
-  uint8_t sum;
-  uint8_t vsum[16];
+  uint8_t sum;          //horizontal sum
+  uint8_t vsum[16];     //vertical sum
   uint8_t total =0;
-  uint32_t saddr =0;
-  uint32_t eaddr =n-1;
+  uint32_t saddr =0;    //start address
+  uint32_t eaddr =n-1;  //end address
   
   printf("----------------------------------------------------------\n");
   uint16_t i;
-  for (i=0;i<16;i++) vsum[i]=0;  
+  for (i=0;i<16;i++) vsum[i]=0;  //vsum 모두 0으로 초기화
+  
   uint32_t addr;
   for (addr = saddr; addr <= eaddr; addr++) {
     data = dt[addr];
