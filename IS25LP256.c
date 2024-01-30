@@ -15,17 +15,22 @@
 //#define MAX_BLOCKSIZE        128    // 총 블록 개수
 //#define MAX_SECTORSIZE       2048   // 총 섹터 수
 
-#define CMD_WRIRE_ENABLE      0x06
-#define CMD_WRITE_DISABLE     0x04
-#define CMD_READ_STATUS_R1    0x05
+#define CMD_NORD              0x03    // Normal Read Mode
+#define CMD_FRD               0x0B    // Fast Read Mode
+
+#define CMD_PP                0x02    // Input Page Program
+#define CMD_SER               0x20    // Sector Erase
+#define CMD_BER32             0x52    // Block Erase 32Kbyte
+#define CMD_BER64             0xD8    // Block Erase 64Kbyte
+#define CMD_CER               0xC7    // Chip Erase
+#define CMD_WREN              0x06    // Write Enable
+#define CMD_WRDI              0x04    // Write Disable
+#define CMD_RDSR              0x05    // Read Status Register
+
+
+
 #define CMD_READ_STATUS_R2    0x35
 #define CMD_WRITE_STATUS_R    0x01 // 미실행
-#define CMD_PAGE_PROGRAM      0x02
-#define CMD_QUAD_PAGE_PROGRAM 0x32 // 미실행
-#define CMD_BLOCK_ERASE64KB   0xd8
-#define CMD_BLOCK_ERASE32KB   0x52
-#define CMD_SECTOR_ERASE      0x20
-#define CMD_CHIP_ERASE        0xC7
 #define CMD_ERASE_SUPPEND     0x75 // 미실행
 #define CMD_ERASE_RESUME      0x7A // 미실행
 #define CMD_POWER_DOWN        0xB9
@@ -36,10 +41,7 @@
 #define CMD_READ_UNIQUE_ID    0x4B
 #define CMD_JEDEC_ID          0x9f
 
-#define CMD_READ_DATA         0x03
-#define CMD_FAST_READ         0x0B
-#define CMD_READ_DUAL_OUTPUT  0x3B // 미실행
-#define CMD_READ_DUAL_IO      0xBB // 미실행
+
 #define CMD_READ_QUAD_OUTPUT  0x6B // 미실행
 #define CMD_READ_QUAD_IO      0xEB // 미실행
 #define CMD_WORD_READ         0xE3 // 미실행
@@ -70,14 +72,14 @@ void IS25LP256_begin(uint8_t spich) {
 }
 
 //
-// 상태 레지스터 1의 값 가져오기
-// 반환 값: 상태 레지스터 1의 값
+// 상태 레지스터의 값 가져오기
+// 반환 값: 상태 레지스터의 값
 //
-uint8_t IS25LP256_readStatusReg1(void) {
+uint8_t IS25LP256_readStatusReg(void) {
   unsigned char data[2];
   int rc;
   UNUSED(rc);
-  data[0] = CMD_READ_STATUS_R1;
+  data[0] = CMD_RDSR;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
   //spcDump("readStatusReg1",rc,data,2);
   return data[1];
@@ -135,7 +137,7 @@ bool IS25LP256_IsBusy(void) {
   unsigned char data[2];
   int rc;
   UNUSED(rc);
-  data[0] = CMD_READ_STATUS_R1;
+  data[0] = CMD_RDSR;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
   //spcDump("IsBusy",rc,data,2);
   uint8_t r1;
@@ -163,7 +165,7 @@ void IS25LP256_WriteEnable(void) {
   unsigned char data[1];
   int rc;
   UNUSED(rc);
-  data[0] = CMD_WRIRE_ENABLE;
+  data[0] = CMD_WREN;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
   //spcDump("WriteEnable",rc,data,1);
 }
@@ -175,7 +177,7 @@ void IS25LP256_WriteDisable(void) {
   unsigned char data[1];
   int rc;
   UNUSED(rc);
-  data[0] = CMD_WRITE_DISABLE;
+  data[0] = CMD_WRDI;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
   //spcDump("WriteDisable",rc,data,1);
 }
@@ -190,7 +192,7 @@ uint16_t IS25LP256_read(uint32_t addr,uint8_t *buf,uint16_t n){
   int rc;
 
   data = (unsigned char*)malloc(n+4);
-  data[0] = CMD_READ_DATA;
+  data[0] = CMD_NORD;
   data[1] = (addr>>16) & 0xFF;     // A23-A16
   data[2] = (addr>>8) & 0xFF;      // A15-A08
   data[3] = addr & 0xFF;           // A07-A00
@@ -211,7 +213,7 @@ uint16_t IS25LP256_fastread(uint32_t addr,uint8_t *buf,uint16_t n) {
   int rc;
 
   data = (unsigned char*)malloc(n+5);
-  data[0] = CMD_FAST_READ;
+  data[0] = CMD_FRD;
   data[1] = (addr>>16) & 0xFF;     // A23-A16
   data[2] = (addr>>8) & 0xFF;      // A15-A08
   data[3] = addr & 0xFF;           // A07-A00
@@ -240,7 +242,7 @@ bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait) {
   addr<<=12;
 
   IS25LP256_WriteEnable();
-  data[0] = CMD_SECTOR_ERASE;
+  data[0] = CMD_SER;
   data[1] = (addr>>16) & 0xff;
   data[2] = (addr>>8) & 0xff;
   data[3] = addr & 0xff;
@@ -272,7 +274,7 @@ bool IS25LP256_erase64Block(uint16_t blk_no, bool flgwait) {
   // 쓰기 권한 설정
   IS25LP256_WriteEnable();
 
-  data[0] = CMD_BLOCK_ERASE64KB;
+  data[0] = CMD_BER64;
   data[1] = (addr>>16) & 0xff;
   data[2] = (addr>>8) & 0xff;
   data[3] = addr & 0xff;
@@ -304,7 +306,7 @@ bool IS25LP256_erase32Block(uint16_t blk_no, bool flgwait) {
   // 쓰기 권한 설정
   IS25LP256_WriteEnable();  
 
-  data[0] = CMD_BLOCK_ERASE32KB;
+  data[0] = CMD_BER32;
   data[1] = (addr>>16) & 0xff;
   data[2] = (addr>>8) & 0xff;
   data[3] = addr & 0xff;
@@ -331,7 +333,7 @@ bool IS25LP256_eraseAll(bool flgwait) {
   // 쓰기 권한 설정
   IS25LP256_WriteEnable();  
 
-  data[0] = CMD_CHIP_ERASE;
+  data[0] = CMD_CER;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
 
   // 처리 대기
@@ -362,7 +364,7 @@ uint16_t IS25LP256_pageWrite(uint16_t sect_no, uint16_t inaddr, uint8_t* buf, ui
   if (IS25LP256_IsBusy()) return 0;  
 
   data = (unsigned char*)malloc(n+4);
-  data[0] = CMD_PAGE_PROGRAM;
+  data[0] = CMD_PP;
   data[1] = (addr>>16) & 0xff;
   data[2] = (addr>>8) & 0xff;
   data[3] = addr & 0xFF;
