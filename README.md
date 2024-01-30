@@ -62,10 +62,10 @@ uint16_t IS25LP256_fastread(uint32_t addr,uint8_t *buf,uint16_t n);
 bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait);  
 
 // Erase data by block(64KB)  
-bool IS25LP256_erase64Block(uint16_t blk_no, bool flgwait);  
+bool IS25LP256_erase64Block(uint16_t blk64_no, bool flgwait);  
 
 // Erase data by Block(32KB)  
-bool IS25LP256_erase32Block(uint16_t blk_no, bool flgwait);  
+bool IS25LP256_erase32Block(uint16_t blk32_no, bool flgwait);  
 
 // Erase all data  
 bool IS25LP256_eraseAll(bool flgwait);  
