@@ -25,7 +25,6 @@
 #define CMD_DP                0xB9    // Deep Power Down
 
 #define CMD_RDJDID            0x9F    // Read JEDEC ID
-#define CMD_RDMDID            0x90    // Read Manufacturer & Device ID, 미사용
 #define CMD_RDUID             0x4B    // Read Unique ID
 
 #define SR1_BUSY_MASK	0x01
