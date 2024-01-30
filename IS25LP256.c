@@ -188,21 +188,22 @@ uint16_t IS25LP256_fastread(uint32_t addr,uint8_t *buf,uint16_t n) {
   data[4] = 0;                     // Dummy byte Byte4
   rc = wiringPiSPIDataRW (_spich,data,n+5);    //Data read from Byte5
   //spcDump("fastread",rc,data,rc);
-  memcpy(buf,&data[5],n);
+  memcpy(buf,&data[5],n);        // data[5]부터 n byte를 읽어서 buf에 복사한다
   free(data);
   return rc-5;
 }
 
 //
-// 섹터 단위 지우기(4kb 공간 단위로 데이터 지우기)
-// 지우기 전에 Write Enable해야 함.
-// 섹터 지우기가 끝나면, Status register의 WEL bit는 자동으로 reset됨
-// sect_no(in) 섹터 번호(0 - 4095)
+// 섹터 단위 지우기(4kb 단위로 데이터 지우기)
+// sect_no(in) 섹터 번호(0 - 8191)
 // flgwait(in) true: 처리 대기 false: 대기 없음
 // 반환값: true:정상 종료 false:실패
 // 추가: 데이터시트에는 지우기에 보통 100ms ~ 300ms 걸린다고 명시되어 있다.
-// 주소 24비트 중 상위 12비트가 섹터 번호에 해당한다.
-// 하위 12비트는 섹터 내 주소가 된다.
+//       주소 24비트 중 상위 12비트가 섹터 번호에 해당한다.
+//       하위 12비트는 섹터 내 주소가 된다.
+//       지우기 전에 Write Enable해야 함.
+//       섹터 지우기가 끝나면, Status register의 WEL bit는 자동으로 reset됨
+
 //
 bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait) {
   unsigned char data[4];
@@ -211,11 +212,11 @@ bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait) {
   uint32_t addr = sect_no;
   addr<<=12;
 
-  IS25LP256_WriteEnable();
-  data[0] = CMD_SER;              // 20h
-  data[1] = (addr>>16) & 0xff;    //
-  data[2] = (addr>>8) & 0xff;
-  data[3] = addr & 0xff;
+  IS25LP256_WriteEnable();        // Write Enable 설정
+  data[0] = CMD_SER;              // 20h        Byte0
+  data[1] = (addr>>16) & 0xff;    // A23-A16    Byte1
+  data[2] = (addr>>8) & 0xff;     // A15-A08    Byte2
+  data[3] = addr & 0xff;          // A07-A00    Byte3
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
  
   // 처리 대기
@@ -226,13 +227,15 @@ bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait) {
 }
 
 //
-// 32KB 블록 단위 지우기(32kb 공간 단위로 데이터 지우기)
-// blk_no(in) 블록 번호(0 - 511)
+// 32KB 블록 단위 지우기(32kB 단위로 데이터 지우기)
+// blk_no(in) 블록 번호(0 - 1023)
 // flgwait(in) true:처리 대기 false:대기 없음
 // 반환값: true:정상 종료 false:실패
-// 추가: 데이터시트에는 지우기에 보통 140ms ~ 500ms 걸린다고 명시되어 있다.
-// 주소 24비트 중 상위 9비트가 블록 번호에 해당한다.
-// 하위 15 비트는 블록 내 주소가 된다.
+// 추가: 데이터시트에는 지우기에 140ms ~ 500ms 걸린다고 명시되어 있다.
+//       주소 24비트 중 상위 9비트가 블록 번호에 해당한다.
+//       하위 15 비트는 블록 내 주소가 된다.
+//       지우기 전에 Write Enable해야 함.
+//       섹터 지우기가 끝나면, Status register의 WEL bit는 자동으로 reset됨
 //
 bool IS25LP256_erase32Block(uint16_t blk_no, bool flgwait) {
   unsigned char data[4];
@@ -258,8 +261,8 @@ bool IS25LP256_erase32Block(uint16_t blk_no, bool flgwait) {
 }
 
 //
-// 64KB 블록 단위 지우기(64kb 공간 단위로 데이터 지우기)
-// blk_no(in) 블록 번호(0 - 255)
+// 64KB 블록 단위 지우기(64kB 단위로 데이터 지우기)
+// blk_no(in) 블록 번호(0 - 511)
 // flgwait(in) true: 처리 대기 false: 대기 없음
 // 반환값: true:정상 종료 false:실패
 // 보충: 데이터시트에는 지우기에 170ms ~ 1000ms 걸린다고 명시되어 있다.
@@ -294,7 +297,7 @@ bool IS25LP256_erase64Block(uint16_t blk_no, bool flgwait) {
 // 전체 영역 지우기 Chip Erase
 // flgwait(in) true:처리 대기 false:대기 없음
 // 반환값: true:정상 종료 false:실패
-// 추가: 데이터시트에는 지우는데 보통 15s, 최대 30s가 걸린다고 명시되어 있다.
+// 추가: 데이터시트에는 지우는데 70s ~ 180s 걸린다고 명시되어 있다.
 //
 bool IS25LP256_eraseAll(bool flgwait) {
   unsigned char data[1];
