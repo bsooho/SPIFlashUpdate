@@ -161,5 +161,6 @@ int main() {
     // Get fron Status Register2
     // buf[0] = IS25LP256_readStatusReg2();
     // printf("Status Register-2: %x\n",buf[0]);
+  
     return 0;
 }
