@@ -77,11 +77,10 @@ int main() {
     }
     
     // 플래시 메모리 사용 시작
-    // Start Flush Memory
+    // (채널 번호 지정. 대부분 0번 사용함)
     IS25LP256_begin(SPI_CHANNEL);
     
     // JEDEC ID 획득
-    //IS25LP256_readManufacturer(buf);
     IS25LP256_readManufacturer(jedc);
     printf("JEDEC ID : ");
     for (i=0; i< 3; i++) {
@@ -89,8 +88,7 @@ int main() {
     }
     printf("\n");
     
-    // Unique ID 획득 테스트
-    // Unique ID Get
+    // Unique ID 획득
     IS25LP256_readUniqieID(buf);
     printf("Unique ID : ");
     for (i=0; i< 8; i++) {
