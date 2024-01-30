@@ -29,7 +29,6 @@
 
 
 
-#define CMD_READ_STATUS_R2    0x35
 #define CMD_WRITE_STATUS_R    0x01 // 미실행
 #define CMD_ERASE_SUPPEND     0x75 // 미실행
 #define CMD_ERASE_RESUME      0x7A // 미실행
@@ -84,22 +83,6 @@ uint8_t IS25LP256_readStatusReg(void) {
   //spcDump("readStatusReg1",rc,data,2);
   return data[1];
 }
-
-//
-// 상태 레지스터 2의 값 가져오기
-// 반환 값: 상태 레지스터 2의 값
-//
-/*
-uint8_t IS25LP256_readStatusReg2(void) {
-  unsigned char data[2];
-  int rc;
-  UNUSED(rc);
-  data[0] = CMD_READ_STATUS_R2;
-  rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
-  //spcDump("readStatusReg2",rc,data,2);
-  return data[1];
-}
-*/
 
 //
 // JEDEC ID(Manufacture, Memory Type, Capacity)를 취득한다.
