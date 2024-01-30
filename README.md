@@ -28,11 +28,8 @@ sudo make
 // Start Flash  
 void IS25LP256_begin(uint8_t spich);  
 
-// Get status register1  
-uint8_t IS25LP256_readStatusReg1(void);  
-
-// Get status register2(Winbond only)  
-uint8_t IS25LP256_readStatusReg2(void);  
+// Get status register  
+uint8_t IS25LP256_readStatusReg(void);  
 
 // Get JEDEC ID(Manufacture, Memory Type,Capacity)  
 void IS25LP256_readManufacturer(uint8_t* jedc);  
