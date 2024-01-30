@@ -200,7 +200,7 @@ uint16_t IS25LP256_fastread(uint32_t addr,uint8_t *buf,uint16_t n) {
 // 반환값: true:정상 종료 false:실패
 // 추가: 데이터시트에는 지우기에 보통 100ms ~ 300ms 걸린다고 명시되어 있다.
 //       주소 24비트 중 상위 12비트가 섹터 번호에 해당한다.
-//       하위 12비트는 섹터 내 주소가 된다.
+//       하위 12비트는 섹터 내 주소가 된다. (4kB 단위이기 때문임)
 //       지우기 전에 Write Enable해야 함.
 //       섹터 지우기가 끝나면, Status register의 WEL bit는 자동으로 reset됨
 
@@ -209,10 +209,10 @@ bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait) {
   unsigned char data[4];
   int rc;
   UNUSED(rc);
-  uint32_t addr = sect_no;
+  uint32_t addr = sect_no;        // Erase할 Sector 주소 (내용은 24bit인데 32bit형으로 선언)
   addr<<=12;
 
-  IS25LP256_WriteEnable();        // Write Enable 설정
+  IS25LP256_WriteEnable();        // Write Enable 설정해야 함
   data[0] = CMD_SER;              // 20h        Byte0
   data[1] = (addr>>16) & 0xff;    // A23-A16    Byte1
   data[2] = (addr>>8) & 0xff;     // A15-A08    Byte2
@@ -233,15 +233,15 @@ bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait) {
 // 반환값: true:정상 종료 false:실패
 // 추가: 데이터시트에는 지우기에 140ms ~ 500ms 걸린다고 명시되어 있다.
 //       주소 24비트 중 상위 9비트가 블록 번호에 해당한다.
-//       하위 15 비트는 블록 내 주소가 된다.
+//       하위 15 비트는 블록 내 주소가 된다. (32kB 단위이기 때문임)
 //       지우기 전에 Write Enable해야 함.
 //       섹터 지우기가 끝나면, Status register의 WEL bit는 자동으로 reset됨
 //
-bool IS25LP256_erase32Block(uint16_t blk_no, bool flgwait) {
+bool IS25LP256_erase32Block(uint16_t blk32_no, bool flgwait) {
   unsigned char data[4];
   int rc;
   UNUSED(rc);
-  uint32_t addr = blk_no;
+  uint32_t addr = blk32_no;
   addr<<=15;
 
   // 쓰기 권한 설정
@@ -266,14 +266,16 @@ bool IS25LP256_erase32Block(uint16_t blk_no, bool flgwait) {
 // flgwait(in) true: 처리 대기 false: 대기 없음
 // 반환값: true:정상 종료 false:실패
 // 보충: 데이터시트에는 지우기에 170ms ~ 1000ms 걸린다고 명시되어 있다.
-// 주소 24비트 중 상위 8비트가 블록 번호에 해당한다.
-// 하위 16비트는 블록 내 주소가 된다.
+//       주소 24비트 중 상위 8비트가 블록 번호에 해당한다.
+//       하위 16비트는 블록 내 주소가 된다. (64kB 단위이기 때문임)
+//       지우기 전에 Write Enable해야 함.
+//       섹터 지우기가 끝나면, Status register의 WEL bit는 자동으로 reset됨
 //
-bool IS25LP256_erase64Block(uint16_t blk_no, bool flgwait) {
+bool IS25LP256_erase64Block(uint16_t blk64_no, bool flgwait) {
   unsigned char data[4];
   int rc;
   UNUSED(rc);
-  uint32_t addr = blk_no;
+  uint32_t addr = blk64_no;
   addr<<=16;
 
   // 쓰기 권한 설정
@@ -312,7 +314,7 @@ bool IS25LP256_eraseAll(bool flgwait) {
 
   // 처리 대기
   while(IS25LP256_IsBusy() & flgwait) {
-    delay(500);
+    delay(1000);        // 1sec마다 체크. 실제로 전체 지우는데 1~3분 걸리므로 한참 돌 것이다.
   }
   return true;
 }
