@@ -164,7 +164,7 @@ uint16_t IS25LP256_read(uint32_t addr,uint8_t *buf,uint16_t n){
   data[1] = (addr>>16) & 0xFF;     // A23-A16
   data[2] = (addr>>8) & 0xFF;      // A15-A08
   data[3] = addr & 0xFF;           // A07-A00
-  rc = wiringPiSPIDataRW (_spich,data,n+4);
+  rc = wiringPiSPIDataRW (_spich,data,n+4);    //Data out on Byte4
   //spcDump("read",rc,data,rc);
   memcpy(buf,&data[4],n);
   free(data);
@@ -185,8 +185,8 @@ uint16_t IS25LP256_fastread(uint32_t addr,uint8_t *buf,uint16_t n) {
   data[1] = (addr>>16) & 0xFF;     // A23-A16
   data[2] = (addr>>8) & 0xFF;      // A15-A08
   data[3] = addr & 0xFF;           // A07-A00
-  data[4] = 0;
-  rc = wiringPiSPIDataRW (_spich,data,n+5);
+  data[4] = 0;                     // Dummy byte
+  rc = wiringPiSPIDataRW (_spich,data,n+5);    //Data out on Byte5
   //spcDump("fastread",rc,data,rc);
   memcpy(buf,&data[5],n);
   free(data);
