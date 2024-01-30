@@ -12,12 +12,8 @@
 
 #include "IS25LP256.h"
 
-//#define MAX_BLOCKSIZE        128    // 총 블록 개수
-//#define MAX_SECTORSIZE       2048   // 총 섹터 수
-
 #define CMD_NORD              0x03    // Normal Read Mode
 #define CMD_FRD               0x0B    // Fast Read Mode
-
 #define CMD_PP                0x02    // Input Page Program
 #define CMD_SER               0x20    // Sector Erase
 #define CMD_BER32             0x52    // Block Erase 32Kbyte
@@ -26,24 +22,11 @@
 #define CMD_WREN              0x06    // Write Enable
 #define CMD_WRDI              0x04    // Write Disable
 #define CMD_RDSR              0x05    // Read Status Register
+#define CMD_DP                0xB9    // Deep Power Down
 
-
-
-#define CMD_WRITE_STATUS_R    0x01 // 미실행
-#define CMD_ERASE_SUPPEND     0x75 // 미실행
-#define CMD_ERASE_RESUME      0x7A // 미실행
-#define CMD_POWER_DOWN        0xB9
-#define CMD_HIGH_PERFORM_MODE 0xA3 // 미실행
-#define CMD_CNT_READ_MODE_RST 0xFF // 미실행
-#define CMD_RELEASE_PDOWN_ID  0xAB // 미실행
-#define CMD_MANUFACURER_ID    0x90
-#define CMD_READ_UNIQUE_ID    0x4B
-#define CMD_JEDEC_ID          0x9f
-
-
-#define CMD_READ_QUAD_OUTPUT  0x6B // 미실행
-#define CMD_READ_QUAD_IO      0xEB // 미실행
-#define CMD_WORD_READ         0xE3 // 미실행
+#define CMD_RDJDID            0x9F    // Read JEDEC ID
+#define CMD_RDMDID            0x90    // Read Manufacturer & Device ID, 미사용
+#define CMD_RDUID             0x4B    // Read Unique ID
 
 #define SR1_BUSY_MASK	0x01
 #define SR1_WEN_MASK	0x02
@@ -80,7 +63,7 @@ uint8_t IS25LP256_readStatusReg(void) {
   UNUSED(rc);
   data[0] = CMD_RDSR;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
-  //spcDump("readStatusReg1",rc,data,2);
+  //spcDump("readStatusReg",rc,data,2);
   return data[1];
 }
 
@@ -93,7 +76,7 @@ void IS25LP256_readManufacturer(uint8_t* d) {
   int rc;
   UNUSED(rc);
   memset(data,0,sizeof(data));
-  data[0] = CMD_JEDEC_ID;
+  data[0] = CMD_RDJDID;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
   //spcDump("readManufacturer",rc,data,4);
   memcpy(d,&data[1],3);
@@ -108,7 +91,7 @@ void IS25LP256_readUniqieID(uint8_t* d) {
   int rc;
   UNUSED(rc);
   memset(data,0,sizeof(data));
-  data[0] = CMD_READ_UNIQUE_ID;
+  data[0] = CMD_RDUID;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
   //spcDump("readUniqieID",rc,data,13);
   memcpy(d,&data[5],8);
@@ -138,7 +121,7 @@ void IS25LP256_powerDown(void) {
   unsigned char data[1];
   int rc;
   UNUSED(rc);
-  data[0] = CMD_POWER_DOWN;
+  data[0] = CMD_DP;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
   //spcDump("powerDown",rc,data,1);
 }
