@@ -28,8 +28,8 @@
 #define CMD_RDJDID            0x9F    // Read JEDEC ID
 #define CMD_RDUID             0x4B    // Read Unique ID
 
-#define SR1_BUSY_MASK	0x01
-#define SR1_WEN_MASK	0x02
+#define SR_BUSY_MASK	      0x01    // Status Register의 Bit0(WIP) 선택을 위한 마스크 (Write In Progress Bit), 0 device ready, 1 device busy
+#define SR_WEN_MASK	          0x02    // Status Register의 Bit1(WEL) 선택을 위한 마스크 (Write Enable Latch), 0 not write enabled, 1 write enabled
 
 
 #define UNUSED(a) ((void)(a))
@@ -105,12 +105,12 @@ bool IS25LP256_IsBusy(void) {
   unsigned char data[2];
   int rc;
   UNUSED(rc);
-  data[0] = CMD_RDSR;
+  data[0] = CMD_RDSR;                    // 05h    Byte0
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
   //spcDump("IsBusy",rc,data,2);
   uint8_t r1;
-  r1 = data[1];
-  if(r1 & SR1_BUSY_MASK) return true;
+  r1 = data[1];                          // Status register 값    Byte1
+  if(r1 & SR_BUSY_MASK) return true;     // Status register의 Bit0(WIP, Write In Progress) 선택
   return false;
 }
 
