@@ -96,8 +96,8 @@ int main() {
     }
     printf("\n");
     
-    // 현재 저장되어 있는 데이터 읽기(주소 0에서 256바이트 가져오기)
-    // Read current 256 byte data from Address=0
+    // 현재 저장되어 있는 데이터 읽기
+    // (주소 0부터 256바이트 가져오기)
     memset(buf,0,256);
     n =  IS25LP256_read(0, buf, 256);
     printf("Read Data: n=%d\n",n);
