@@ -119,10 +119,10 @@ int main() {
     dump(buf,256);
  
     // 데이터 쓰기 테스트
-    // Write data to Sector=0 Address=10
-    for (i=0; i < 26;i++) {
-      wdata[i]='A'+i; // A-Z     
-    }  
+    // Write data to Sector No=0 Address=10
+    for (i=0; i < 26; i++) {
+      wdata[i]='A'+i; // A-Z, 총 26개
+    }
     n =  IS25LP256_pageWrite(0, 10, wdata, 26);
     printf("page_write(0,10,d,26): n=%d\n",n);
 
@@ -135,7 +135,7 @@ int main() {
 
     // 데이터 쓰기 테스트
     // Write data to Sector=0 Address=0
-    for (i=0; i < 10;i++) {
+    for (i=0; i < 10; i++) {
       wdata[i]='0'+i; // 0-9     
     }  
     n =  IS25LP256_pageWrite(0, 0, wdata, 10);
