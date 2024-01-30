@@ -80,7 +80,7 @@ int main() {
     // (채널 번호 지정. 대부분 0번 사용함)
     IS25LP256_begin(SPI_CHANNEL);
     
-    // JEDEC ID 획득
+    // JEDEC ID 획득 (3byte)
     IS25LP256_readManufacturer(jedc);
     printf("JEDEC ID : ");
     for (i=0; i< 3; i++) {
@@ -88,10 +88,10 @@ int main() {
     }
     printf("\n");
     
-    // Unique ID 획득
+    // Unique ID 획득 (16byte)
     IS25LP256_readUniqieID(buf);
     printf("Unique ID : ");
-    for (i=0; i< 8; i++) {
+    for (i=0; i< 16; i++) {
       printf("%x ",buf[i]);
     }
     printf("\n");
