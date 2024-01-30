@@ -84,17 +84,17 @@ void IS25LP256_readManufacturer(uint8_t* d) {
 
 //
 // Unique ID 가져오기
-// d(out): Unique ID 8바이트를 반환합니다.
+// d(out): Unique ID 16byte(128bit)를 반환합니다.
 //
 void IS25LP256_readUniqieID(uint8_t* d) {
-  unsigned char data[13];
+  unsigned char data[21];
   int rc;
   UNUSED(rc);
   memset(data,0,sizeof(data));
   data[0] = CMD_RDUID;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
   //spcDump("readUniqieID",rc,data,13);
-  memcpy(d,&data[5],8);
+  memcpy(d,&data[5],16);
 }
 
 //
