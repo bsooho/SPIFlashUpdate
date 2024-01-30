@@ -93,7 +93,7 @@ void IS25LP256_readUniqieID(uint8_t* d) {
   memset(data,0,sizeof(data));
   data[0] = CMD_RDUID;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
-  //spcDump("readUniqieID",rc,data,13);
+  //spcDump("readUniqieID",rc,data,21);
   memcpy(d,&data[5],16);
 }
 
