@@ -209,7 +209,7 @@ bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait) {
   unsigned char data[4];
   int rc;
   UNUSED(rc);
-  uint32_t addr = sect_no;        // Erase할 Sector 주소 (내용은 24bit인데 32bit형으로 선언)
+  uint32_t addr = sect_no;        // Erase할 Sector 번호 (0 ~ 8191)
   addr<<=12;
 
   IS25LP256_WriteEnable();        // Write Enable 설정해야 함
@@ -247,7 +247,7 @@ bool IS25LP256_erase32Block(uint16_t blk32_no, bool flgwait) {
   // 쓰기 권한 설정
   IS25LP256_WriteEnable();  
 
-  data[0] = CMD_BER32;
+  data[0] = CMD_BER32;              // 52h        Byte0
   data[1] = (addr>>16) & 0xff;
   data[2] = (addr>>8) & 0xff;
   data[3] = addr & 0xff;
