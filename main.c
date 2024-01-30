@@ -64,11 +64,10 @@ void dump(uint8_t *dt, uint32_t n) {
 }
 
 int main() {
-    uint8_t jedc[3];      // JEDEC-ID
-    uint8_t buf[256];     // 취득 데이터
-    uint8_t wdata[26];    // 데이터 쓰기
-    uint8_t i;
-    
+    uint8_t jedc[3];      // JEDEC-ID (3byte, MF7-MF0 ID15-ID8 ID7-ID0)
+    uint8_t buf[256];     // 취득 데이터, 256byte
+    uint8_t wdata[26];    // 데이터 쓰기, 26byte???
+    uint8_t i;            // 범용 변수
     uint16_t n;           // 취득 데이터 수
 
     // SPI channel 0을 2MHz로 시작
@@ -81,8 +80,7 @@ int main() {
     // Start Flush Memory
     IS25LP256_begin(SPI_CHANNEL);
     
-    // JEDEC ID 획득 테스트
-    // JEDEC ID Get
+    // JEDEC ID 획득
     //IS25LP256_readManufacturer(buf);
     IS25LP256_readManufacturer(jedc);
     printf("JEDEC ID : ");
