@@ -35,10 +35,10 @@ uint16_t IS25LP256_fastread(uint32_t addr,uint8_t *buf,uint16_t n);
 bool  IS25LP256_eraseSector(uint16_t sect_no, bool flgwait);
 
 // 64KB 블록 단위 지우기
-bool  IS25LP256_erase64Block(uint16_t blk_no, bool flgwait);
+bool  IS25LP256_erase64Block(uint16_t blk64_no, bool flgwait);
 
 // 32KB 블록 단위 지우기
-bool  IS25LP256_erase32Block(uint16_t blk_no, bool flgwait);
+bool  IS25LP256_erase32Block(uint16_t blk32_no, bool flgwait);
 
 // 전체 영역 지우기
 bool  IS25LP256_eraseAll(bool flgwait);
