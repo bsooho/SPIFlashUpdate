@@ -81,7 +81,7 @@ int main() {
     // Start Flush Memory
     IS25LP256_begin(SPI_CHANNEL);
     
-    // JEDEC IDの 획득 테스트
+    // JEDEC ID 획득 테스트
     // JEDEC ID Get
     //IS25LP256_readManufacturer(buf);
     IS25LP256_readManufacturer(jedc);
@@ -100,14 +100,14 @@ int main() {
     }
     printf("\n");
     
-    // 데이터 불러오기(주소 0에서 256바이트 가져오기)
-    // Read 256 byte data from Address=0
+    // 현재 저장되어 있는 데이터 읽기(주소 0에서 256바이트 가져오기)
+    // Read current 256 byte data from Address=0
     memset(buf,0,256);
     n =  IS25LP256_read(0, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
-    // 고속 데이터 로딩 (주소 0에서 256바이트까지 획득)
+    // 현재 저장되어 있는 데이터 고속 읽기 (주소 0에서 256바이트까지 획득)
     // First read 256 byte data from Address=0
     memset(buf,0,256);
     n =  IS25LP256_fastread(0, buf, 256);
