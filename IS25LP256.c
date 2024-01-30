@@ -321,29 +321,32 @@ bool IS25LP256_eraseAll(bool flgwait) {
 
 //
 // 데이터 쓰기
-// sect_no(in) : 섹터 번호(0x000 - 0xFFF) 
-// inaddr(in) : 섹터 내 주소(0x000 - 0xFFF)
+// sect_no(in) : 섹터 번호(0 - 8191, 0x000 - 0x1FF) 
+// inaddr(in) : 섹터 내 주소(0 - 4095, 0x000 - 0xFFF)
+// buf(in) : 쓰는 데이터값의 시작 주소(포인터)
 // data(in) : 쓰기 데이터 저장 주소
-// n(in) : 쓰기 바이트 수(0~256)
+// n(in) : 쓰기 바이트 수(0~256 범위)
 //
 uint16_t IS25LP256_pageWrite(uint16_t sect_no, uint16_t inaddr, uint8_t* buf, uint16_t n) {
-  if (n > 256) return 0;
+    // 섹터 번호, 섹터 내 주소값, 쓸 데이터의 최초 포인터, 쓸 데이터 갯수(byte 단위)
+  if (n > 256) return 0;    // Page Program (PP)는 한번에 최대 256byte까지만 쓸 수 있음
+
   unsigned char *data;
   int rc;
 
   uint32_t addr = sect_no;
-  addr<<=12;
-  addr += inaddr;
+  addr<<=12;         // Sector 번호는 12bit 왼쪽으로 밀고,
+  addr += inaddr;    // 섹터내 주소를 더하면 최종 주소 만들어짐
 
   // 쓰기 권한 설정
   IS25LP256_WriteEnable();  
-  if (IS25LP256_IsBusy()) return 0;  
+  if (IS25LP256_IsBusy()) return 0;      // 다른 일을 하고 있어서 Busy 상태면 멈춤
 
-  data = (unsigned char*)malloc(n+4);
-  data[0] = CMD_PP;
-  data[1] = (addr>>16) & 0xff;
-  data[2] = (addr>>8) & 0xff;
-  data[3] = addr & 0xFF;
+  data = (unsigned char*)malloc(n+4);    // 쓸 데이터 갯수에 4 byte 추가 (CMD + 3byte 주소)
+  data[0] = CMD_PP;                      // D8h        Byte0
+  data[1] = (addr>>16) & 0xff;           // A23-A16    Byte1
+  data[2] = (addr>>8) & 0xff;            // A15-A08    Byte2
+  data[3] = addr & 0xff;                 // A07-A00    Byte3
   memcpy(&data[4],buf,n);
   rc = wiringPiSPIDataRW (_spich,data,n+4);
   //spcDump("pageWrite",rc,buf,n);
