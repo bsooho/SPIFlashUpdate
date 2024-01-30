@@ -110,7 +110,7 @@ int main() {
     printf("Fast Read Data: n=%d\n",n);
     dump(buf,256);
 
-    // 섹터 단위 삭제
+    // 섹터 단위 삭제, 256byte 단위로 테스트하므로 4kB 즉 4096byte만 지워도 됨
     // Erase data by Sector
     n = IS25LP256_eraseSector(0,true);
     printf("Erase Sector(0): n=%d\n",n);
