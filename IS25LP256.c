@@ -1,5 +1,6 @@
 //
 // Flash Memory IS25LP256 Access Library for RaspberryPi
+// Using wiringPi library for SPI control
 //
 
 #include <stdio.h>
