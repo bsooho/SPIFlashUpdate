@@ -221,7 +221,7 @@ bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait) {
  
   // 처리 대기
   while(IS25LP256_IsBusy() & flgwait) {
-    delay(10);
+    delay(10);    // 10msec 마다 체크 (100~300msec 소요)
   }
   return true;
 }
@@ -247,15 +247,15 @@ bool IS25LP256_erase32Block(uint16_t blk32_no, bool flgwait) {
   // 쓰기 권한 설정
   IS25LP256_WriteEnable();  
 
-  data[0] = CMD_BER32;              // 52h        Byte0
-  data[1] = (addr>>16) & 0xff;
-  data[2] = (addr>>8) & 0xff;
-  data[3] = addr & 0xff;
+  data[0] = CMD_BER32;            // 52h        Byte0
+  data[1] = (addr>>16) & 0xff;    // A23-A16    Byte1
+  data[2] = (addr>>8) & 0xff;     // A15-A08    Byte2
+  data[3] = addr & 0xff;          // A07-A00    Byte3
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
  
   // 처리 대기
   while(IS25LP256_IsBusy() & flgwait) {
-    delay(50);
+    delay(50);    // 50msec 마다 체크 (140~500msec 소요)
   }
   return true;
 }
@@ -281,15 +281,15 @@ bool IS25LP256_erase64Block(uint16_t blk64_no, bool flgwait) {
   // 쓰기 권한 설정
   IS25LP256_WriteEnable();
 
-  data[0] = CMD_BER64;
-  data[1] = (addr>>16) & 0xff;
-  data[2] = (addr>>8) & 0xff;
-  data[3] = addr & 0xff;
+  data[0] = CMD_BER64;            // D8h        Byte0
+  data[1] = (addr>>16) & 0xff;    // A23-A16    Byte1
+  data[2] = (addr>>8) & 0xff;     // A15-A08    Byte2
+  data[3] = addr & 0xff;          // A07-A00    Byte3
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
  
   // 처리 대기
   while(IS25LP256_IsBusy() & flgwait) {
-    delay(50);
+    delay(50);    // 50msec 마다 체크 (170 ~ 1000msec 소요)
   }
   return true;
 }
