@@ -291,7 +291,7 @@ bool IS25LP256_erase64Block(uint16_t blk_no, bool flgwait) {
 
 
 //
-// 전체 영역 지우기
+// 전체 영역 지우기 Chip Erase
 // flgwait(in) true:처리 대기 false:대기 없음
 // 반환값: true:정상 종료 false:실패
 // 추가: 데이터시트에는 지우는데 보통 15s, 최대 30s가 걸린다고 명시되어 있다.
