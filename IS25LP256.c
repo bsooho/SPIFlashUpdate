@@ -151,8 +151,8 @@ void IS25LP256_WriteDisable(void) {
 }
 
 //
-// 데이터 불러오기
-// addr(in): 읽기 시작 주소 (24비트 0x000000 - 0xFFFFFFFF)
+// 데이터 읽기 Normal Read Mode (NORD)
+// addr(in): 읽기 시작 주소 (범위: 24비트 0x000000 - 0x1FFFFFFF)
 // n(in): 읽기 데이터 수
 //
 uint16_t IS25LP256_read(uint32_t addr,uint8_t *buf,uint16_t n){ 
@@ -160,11 +160,11 @@ uint16_t IS25LP256_read(uint32_t addr,uint8_t *buf,uint16_t n){
   int rc;
 
   data = (unsigned char*)malloc(n+4);
-  data[0] = CMD_NORD;
-  data[1] = (addr>>16) & 0xFF;     // A23-A16
-  data[2] = (addr>>8) & 0xFF;      // A15-A08
-  data[3] = addr & 0xFF;           // A07-A00
-  rc = wiringPiSPIDataRW (_spich,data,n+4);    //Data out on Byte4
+  data[0] = CMD_NORD;              // 03h        Byte0
+  data[1] = (addr>>16) & 0xFF;     // A23-A16    Byte1
+  data[2] = (addr>>8) & 0xFF;      // A15-A08    Byte2
+  data[3] = addr & 0xFF;           // A07-A00    Byte3
+  rc = wiringPiSPIDataRW (_spich,data,n+4);    //Data read from Byte4
   //spcDump("read",rc,data,rc);
   memcpy(buf,&data[4],n);
   free(data);
@@ -172,8 +172,8 @@ uint16_t IS25LP256_read(uint32_t addr,uint8_t *buf,uint16_t n){
 }
 
 //
-// 고속 데이터 읽기
-// addr(in): 읽기 시작 주소 (24비트 0x000000 - 0xFFFFFFFF)
+// 고속 데이터 읽기 Fast Read Mode (FRD)
+// addr(in): 읽기 시작 주소 (24비트 0x000000 - 0x1FFFFFFF)
 // n(in): 읽기 데이터 수
 //
 uint16_t IS25LP256_fastread(uint32_t addr,uint8_t *buf,uint16_t n) {
@@ -181,12 +181,12 @@ uint16_t IS25LP256_fastread(uint32_t addr,uint8_t *buf,uint16_t n) {
   int rc;
 
   data = (unsigned char*)malloc(n+5);
-  data[0] = CMD_FRD;
-  data[1] = (addr>>16) & 0xFF;     // A23-A16
-  data[2] = (addr>>8) & 0xFF;      // A15-A08
-  data[3] = addr & 0xFF;           // A07-A00
-  data[4] = 0;                     // Dummy byte
-  rc = wiringPiSPIDataRW (_spich,data,n+5);    //Data out on Byte5
+  data[0] = CMD_FRD;               // 0Bh        Byte0
+  data[1] = (addr>>16) & 0xFF;     // A23-A16    Byte1
+  data[2] = (addr>>8) & 0xFF;      // A15-A08    Byte2
+  data[3] = addr & 0xFF;           // A07-A00    Byte3
+  data[4] = 0;                     // Dummy byte Byte4
+  rc = wiringPiSPIDataRW (_spich,data,n+5);    //Data read from Byte5
   //spcDump("fastread",rc,data,rc);
   memcpy(buf,&data[5],n);
   free(data);
@@ -195,10 +195,12 @@ uint16_t IS25LP256_fastread(uint32_t addr,uint8_t *buf,uint16_t n) {
 
 //
 // 섹터 단위 지우기(4kb 공간 단위로 데이터 지우기)
+// 지우기 전에 Write Enable해야 함.
+// 섹터 지우기가 끝나면, Status register의 WEL bit는 자동으로 reset됨
 // sect_no(in) 섹터 번호(0 - 4095)
 // flgwait(in) true: 처리 대기 false: 대기 없음
 // 반환값: true:정상 종료 false:실패
-// 추가: 데이터시트에는 지우기에 보통 30ms, 최대 400ms가 걸린다고 명시되어 있다.
+// 추가: 데이터시트에는 지우기에 보통 100ms ~ 300ms 걸린다고 명시되어 있다.
 // 주소 24비트 중 상위 12비트가 섹터 번호에 해당한다.
 // 하위 12비트는 섹터 내 주소가 된다.
 //
@@ -210,8 +212,8 @@ bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait) {
   addr<<=12;
 
   IS25LP256_WriteEnable();
-  data[0] = CMD_SER;
-  data[1] = (addr>>16) & 0xff;
+  data[0] = CMD_SER;              // 20h
+  data[1] = (addr>>16) & 0xff;    //
   data[2] = (addr>>8) & 0xff;
   data[3] = addr & 0xff;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
@@ -224,11 +226,43 @@ bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait) {
 }
 
 //
+// 32KB 블록 단위 지우기(32kb 공간 단위로 데이터 지우기)
+// blk_no(in) 블록 번호(0 - 511)
+// flgwait(in) true:처리 대기 false:대기 없음
+// 반환값: true:정상 종료 false:실패
+// 추가: 데이터시트에는 지우기에 보통 140ms ~ 500ms 걸린다고 명시되어 있다.
+// 주소 24비트 중 상위 9비트가 블록 번호에 해당한다.
+// 하위 15 비트는 블록 내 주소가 된다.
+//
+bool IS25LP256_erase32Block(uint16_t blk_no, bool flgwait) {
+  unsigned char data[4];
+  int rc;
+  UNUSED(rc);
+  uint32_t addr = blk_no;
+  addr<<=15;
+
+  // 쓰기 권한 설정
+  IS25LP256_WriteEnable();  
+
+  data[0] = CMD_BER32;
+  data[1] = (addr>>16) & 0xff;
+  data[2] = (addr>>8) & 0xff;
+  data[3] = addr & 0xff;
+  rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
+ 
+  // 처리 대기
+  while(IS25LP256_IsBusy() & flgwait) {
+    delay(50);
+  }
+  return true;
+}
+
+//
 // 64KB 블록 단위 지우기(64kb 공간 단위로 데이터 지우기)
 // blk_no(in) 블록 번호(0 - 255)
 // flgwait(in) true: 처리 대기 false: 대기 없음
 // 반환값: true:정상 종료 false:실패
-// 보충: 데이터시트에는 지우기에 보통 150ms, 최대 1000ms가 걸린다고 명시되어 있다.
+// 보충: 데이터시트에는 지우기에 170ms ~ 1000ms 걸린다고 명시되어 있다.
 // 주소 24비트 중 상위 8비트가 블록 번호에 해당한다.
 // 하위 16비트는 블록 내 주소가 된다.
 //
@@ -255,37 +289,6 @@ bool IS25LP256_erase64Block(uint16_t blk_no, bool flgwait) {
   return true;
 }
 
-//
-// 32KB 블록 단위 지우기(32kb 공간 단위로 데이터 지우기)
-// blk_no(in) 블록 번호(0 - 511)
-// flgwait(in) true:처리 대기 false:대기 없음
-// 반환값: true:정상 종료 false:실패
-// 추가: 데이터시트에는 지우기에 보통 120ms, 최대 800ms가 걸린다고 명시되어 있다.
-// 주소 24비트 중 상위 9비트가 블록 번호에 해당한다.
-// 하위 15 비트는 블록 내 주소가 된다.
-//
-bool IS25LP256_erase32Block(uint16_t blk_no, bool flgwait) {
-  unsigned char data[4];
-  int rc;
-  UNUSED(rc);
-  uint32_t addr = blk_no;
-  addr<<=15;
-
-  // 쓰기 권한 설정
-  IS25LP256_WriteEnable();  
-
-  data[0] = CMD_BER32;
-  data[1] = (addr>>16) & 0xff;
-  data[2] = (addr>>8) & 0xff;
-  data[3] = addr & 0xff;
-  rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
- 
-  // 처리 대기
-  while(IS25LP256_IsBusy() & flgwait) {
-    delay(50);
-  }
-  return true;
-}
 
 //
 // 전체 영역 지우기
