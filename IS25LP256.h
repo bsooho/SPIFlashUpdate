@@ -7,9 +7,6 @@ void IS25LP256_begin(uint8_t cs);
 // 상태 레지스터의 값 가져오기
 uint8_t IS25LP256_readStatusReg(void);
 
-// 상태 레지스터 2의 값 가져오기
-//uint8_t IS25LP256_readStatusReg2();
-
 // JEDEC ID(Manufacture, Memory Type,Capacity) 취득
 void IS25LP256_readManufacturer(uint8_t* d);
 
