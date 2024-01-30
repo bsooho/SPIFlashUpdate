@@ -126,7 +126,7 @@ int main() {
     n =  IS25LP256_pageWrite(0, 10, wdata, 26);
     printf("page_write(0,10,d,26): n=%d\n",n);
 
-    // 데이터 불러오기 (주소 0에서 256바이트 데이터 가져오기)
+    // 데이터 읽기 (주소 0부터 256바이트 데이터 가져오기)
     // Read 256 byte data from Address=0
     memset(buf,0,256);
     n =  IS25LP256_read(0, buf, 256);
