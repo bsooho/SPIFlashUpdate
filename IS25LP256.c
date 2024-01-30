@@ -89,6 +89,7 @@ uint8_t IS25LP256_readStatusReg(void) {
 // 상태 레지스터 2의 값 가져오기
 // 반환 값: 상태 레지스터 2의 값
 //
+/*
 uint8_t IS25LP256_readStatusReg2(void) {
   unsigned char data[2];
   int rc;
@@ -98,6 +99,7 @@ uint8_t IS25LP256_readStatusReg2(void) {
   //spcDump("readStatusReg2",rc,data,2);
   return data[1];
 }
+*/
 
 //
 // JEDEC ID(Manufacture, Memory Type, Capacity)를 취득한다.
