@@ -154,12 +154,12 @@ int main() {
 
     // 상태 레지스터1 가져오기
     // Get fron Status Register1
-    buf[0] = IS25LP256_readStatusReg1();
-    printf("Status Register-1: %x\n",buf[0]);
+    buf[0] = IS25LP256_readStatusReg();
+    printf("Status Register: %x\n",buf[0]);
 
     // 상태 레지스터2 가져오기
     // Get fron Status Register2
-    buf[0] = IS25LP256_readStatusReg2();
-    printf("Status Register-2: %x\n",buf[0]);
+    // buf[0] = IS25LP256_readStatusReg2();
+    // printf("Status Register-2: %x\n",buf[0]);
     return 0;
 }
