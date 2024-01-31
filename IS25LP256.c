@@ -107,7 +107,7 @@ bool IS25LP256_IsBusy(void) {
   UNUSED(rc);
   data[0] = CMD_RDSR;                    // 05h    Byte0
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
-  //spcDump("IsBusy",rc,data,2);
+  spcDump("IsBusy",rc,data,2);
   uint8_t r1;
   r1 = data[1];                          // Status register 값    Byte1
   if(r1 & SR_BUSY_MASK) return true;     // Status register의 Bit0(WIP, Write In Progress) 선택
@@ -135,7 +135,7 @@ void IS25LP256_WriteEnable(void) {
   UNUSED(rc);
   data[0] = CMD_WREN;
   rc = wiringPiSPIDataRW (_spich,data,sizeof(data));
-  //spcDump("WriteEnable",rc,data,1);
+  spcDump("WriteEnable",rc,data,1);
 }
 
 //
@@ -165,7 +165,7 @@ uint16_t IS25LP256_read(uint32_t addr,uint8_t *buf,uint16_t n){
   data[2] = (addr>>8) & 0xFF;      // A15-A08    Byte2
   data[3] = addr & 0xFF;           // A07-A00    Byte3
   rc = wiringPiSPIDataRW (_spich,data,n+4);    //Data read from Byte4
-  //spcDump("read",rc,data,rc);
+  spcDump("read",rc,data,rc);
   memcpy(buf,&data[4],n);
   free(data);
   return rc-4;
@@ -187,7 +187,7 @@ uint16_t IS25LP256_fastread(uint32_t addr,uint8_t *buf,uint16_t n) {
   data[3] = addr & 0xFF;           // A07-A00    Byte3
   data[4] = 0;                     // Dummy byte Byte4
   rc = wiringPiSPIDataRW (_spich,data,n+5);    //Data read from Byte5
-  //spcDump("fastread",rc,data,rc);
+  spcDump("fastread",rc,data,rc);
   memcpy(buf,&data[5],n);        // data[5]부터 n byte를 읽어서 buf에 복사한다
   free(data);
   return rc-5;
@@ -349,7 +349,7 @@ uint16_t IS25LP256_pageWrite(uint16_t sect_no, uint16_t inaddr, uint8_t* buf, ui
   data[3] = addr & 0xff;                 // A07-A00    Byte3
   memcpy(&data[4],buf,n);
   rc = wiringPiSPIDataRW (_spich,data,n+4);
-  //spcDump("pageWrite",rc,buf,n);
+  spcDump("pageWrite",rc,buf,n);
 
   // 처리 대기
   while(IS25LP256_IsBusy()) ;
