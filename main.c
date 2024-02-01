@@ -76,9 +76,9 @@ int main() {
     uint16_t blk32_no;    // block(32kB) number
     uint16_t blk64_no;    // block(64kB) number
 
-    int start_address=0x10000;    // start address
-    uint16_t s_sect_no=start_addres>>12;  // start sector and page write number
-    uint32_t s_addr=start_addres;       // start address for 32bit variable
+    int start_addr=0x10000;    // start address
+    uint16_t s_sect_no=start_addr>>12;  // start sector and page write number
+    uint32_t s_addr=start_addr;       // start address for 32bit variable
   
     // SPI channel 0을 2MHz로 시작
     // Start SPI channel 0 with 2MHz
