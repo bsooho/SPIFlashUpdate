@@ -134,7 +134,7 @@ int main() {
       wdata[i]='A'+i; // 쓸 데이터 생성, A-Z, 총 26개
     }
     n =  IS25LP256_pageWrite(s_sect_no, 10, wdata, 26);
-    printf("page_write(%d,10,d,26): n=%d\n",START_ADDR,n);
+    printf("page_write(%d,10,d,26): n=%d\n",start_addr,n);
 
     // 데이터 읽기 (주소 0부터 256바이트 데이터 가져오기)
     // Read 256 byte data from Address=0
