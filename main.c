@@ -29,11 +29,11 @@
 void dump(uint8_t *dt, uint32_t n) {
   uint16_t clm = 0;
   uint8_t data;
-  uint8_t sum;          //horizontal sum
-  uint8_t vsum[16];     //vertical sum
+  uint8_t sum;          // horizontal sum
+  uint8_t vsum[16];     // vertical sum
   uint8_t total =0;
-  uint32_t saddr =0;    //start address
-  uint32_t eaddr =n-1;  //end address
+  uint32_t saddr =0;    // start address
+  uint32_t eaddr =n-1;  // end address
   
   printf("----------------------------------------------------------\n");
   uint16_t i;
@@ -72,7 +72,10 @@ int main() {
     uint8_t wdata[26];    // 데이터 쓰기, 26byte???
     uint8_t i;            // 범용 변수
     uint16_t n;           // 취득 데이터 수
-
+    uint16_t sect_no;     // sector number
+    uint16_t blk32_no;    // block(32kB) number
+    uint16_t blk64_no;    // block(64kB) number
+  
     // SPI channel 0을 2MHz로 시작
     // Start SPI channel 0 with 2MHz
     if (wiringPiSPISetup(SPI_CHANNEL, 2000000) < 0) {
@@ -114,9 +117,10 @@ int main() {
     dump(buf,256);
 
     // 섹터 단위 삭제, 256byte 단위로 테스트하므로 4kB 즉 4096byte만 지워도 됨
-    // 입력할 주소는 Sector No.이므로, 주소를 12bit 오른쪾으로 밀어야 함.
+    // 입력할 주소는 Sector No.이므로, 주소를 12bit 오른으로 밀어야 함.
     // Erase data by Sector
-    n = IS25LP256_eraseSector(START_ADDR,true);
+    sect_no=START_ADRR>>12;
+    n = IS25LP256_eraseSector(sect_no,true);
     printf("Erase Sector(0): n=%d\n",n);
     memset(buf,0,256);  // 임시 버퍼 클리어
     n =  IS25LP256_read (0, buf, 256);
