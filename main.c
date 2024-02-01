@@ -76,8 +76,9 @@ int main() {
     uint16_t blk32_no;    // block(32kB) number
     uint16_t blk64_no;    // block(64kB) number
 
-    uint16_t saddr16=0x10000;   // start address for 16bit variable
-    uint32_t saddr32=0x10000;   // start address for 32bit variable
+    int start_address=0x10000;    // start address
+    uint16_t s_sect_no=start_addres>>12;  // start sector and page write number
+    uint32_t s_addr=start_addres;       // start address for 32bit variable
   
     // SPI channel 0을 2MHz로 시작
     // Start SPI channel 0 with 2MHz
@@ -108,14 +109,14 @@ int main() {
     // 현재 저장되어 있는 데이터 읽기
     // 주소 START_ADDR부터 256바이트 가져오기
     memset(buf,0,256);  // 임시 버퍼 클리어
-    n =  IS25LP256_read(saddr32, buf, 256);
+    n =  IS25LP256_read(s_addr, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
     // 현재 저장되어 있는 데이터 고속 읽기
     // 주소 START_ADDR에서 256바이트까지 획득
     memset(buf,0,256);
-    n =  IS25LP256_fastread(saddr32, buf, 256);
+    n =  IS25LP256_fastread(s_addr, buf, 256);
     printf("Fast Read Data: n=%d\n",n);
     dump(buf,256);
 
@@ -123,7 +124,7 @@ int main() {
     // 입력할 주소는 Sector No.이므로, 주소를 12bit 오른으로 밀어야 함.
     // Erase data by Sector
     sect_no=START_ADRR>>12;
-    n = IS25LP256_eraseSector(saddr16,true);
+    n = IS25LP256_eraseSector(s_sect_no,true);
     printf("Erase Sector(0): n=%d\n",n);
     memset(buf,0,256);  // 임시 버퍼 클리어
     n =  IS25LP256_read (0, buf, 256);
@@ -133,13 +134,13 @@ int main() {
     for (i=0; i < 26; i++) {
       wdata[i]='A'+i; // 쓸 데이터 생성, A-Z, 총 26개
     }
-    n =  IS25LP256_pageWrite(saddr16, 10, wdata, 26);
+    n =  IS25LP256_pageWrite(s_sect_no, 10, wdata, 26);
     printf("page_write(%d,10,d,26): n=%d\n",START_ADDR,n);
 
     // 데이터 읽기 (주소 0부터 256바이트 데이터 가져오기)
     // Read 256 byte data from Address=0
     memset(buf,0,256);  // 임시 버퍼 클리어
-    n =  IS25LP256_read(saddr32, buf, 256);
+    n =  IS25LP256_read(s_addr, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
@@ -148,13 +149,13 @@ int main() {
     for (i=0; i < 10; i++) {
       wdata[i]='0'+i; // 0-9     
     }  
-    n =  IS25LP256_pageWrite(saddr16, 0, wdata, 10);
+    n =  IS25LP256_pageWrite(s_sect_no, 0, wdata, 10);
     printf("page_write(%d,0,d,10): n=%d\n",START_ADDR,n);
 
     // 고속 데이터 읽기(주소 0에서 256바이트 가져 오기)
     // First read 256 byte data from Address=0
     memset(buf,0,256);  // 임시 버퍼 클리어
-    n =  IS25LP256_fastread(saddr32,buf, 256);
+    n =  IS25LP256_fastread(s_addr,buf, 256);
     printf("Fast Read Data: n=%d\n",n);
     dump(buf,256);
 
