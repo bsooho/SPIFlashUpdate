@@ -329,7 +329,7 @@ bool IS25LP256_eraseAll(bool flgwait) {
 //
 uint16_t IS25LP256_pageWrite(uint16_t sect_no, uint16_t inaddr, uint8_t* buf, uint16_t n) {
     // 섹터 번호, 섹터 내 주소값, 쓸 데이터의 최초 포인터, 쓸 데이터 갯수(byte 단위)
-  if (n > 256) return 0;    // Page Program (PP)는 한번에 최대 256byte까지만 쓸 수 있음
+  if (n > 256) return 0;    // Input Page Program(PP) 명령은 한번에 최대 256byte까지만 쓸 수 있음
 
   unsigned char *data;
   int rc;
