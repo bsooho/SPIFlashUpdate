@@ -18,6 +18,9 @@
 #define SPI_CHANNEL 0   // /dev/spidev0.0 사용
 //#define SPI_CHANNEL 1 // /dev/spidev0.1 사용
 
+#define START_ADDR  0  // 사용할 메모리의 시작 주소 지정
+
+
 //
 // 쓰기 데이터 덤프 목록 보여주기
 // dt(in) : 데이터 저장 시작 주소 (포인터)
@@ -99,14 +102,14 @@ int main() {
     // 현재 저장되어 있는 데이터 읽기
     // (주소 0부터 256바이트 가져오기)
     memset(buf,0,256);
-    n =  IS25LP256_read(0, buf, 256);
+    n =  IS25LP256_read(START_ADDR, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
     // 현재 저장되어 있는 데이터 고속 읽기 (주소 0에서 256바이트까지 획득)
     // First read 256 byte data from Address=0
     memset(buf,0,256);
-    n =  IS25LP256_fastread(0, buf, 256);
+    n =  IS25LP256_fastread(START_ADDR, buf, 256);
     printf("Fast Read Data: n=%d\n",n);
     dump(buf,256);
 
