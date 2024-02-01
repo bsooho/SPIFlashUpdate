@@ -241,7 +241,7 @@ bool IS25LP256_erase32Block(uint16_t blk32_no, bool flgwait) {
   unsigned char data[4];
   int rc;
   UNUSED(rc);
-  uint32_t addr = blk32_no;
+  uint32_t addr = blk32_no;       // Erase할 Block(32KB) 번호 (0 ~ 1023)
   addr<<=15;                      // 왼쪽으로 15bit 밀어야 실제 주소가 만들어짐
 
   // 쓰기 권한 설정
@@ -275,7 +275,7 @@ bool IS25LP256_erase64Block(uint16_t blk64_no, bool flgwait) {
   unsigned char data[4];
   int rc;
   UNUSED(rc);
-  uint32_t addr = blk64_no;
+  uint32_t addr = blk64_no;       // Erase할 Block(64kB) 번호 (0 ~ 511)
   addr<<=16;                      // 왼쪽으로 16bit 밀어야 실제 주소가 만들어짐
 
   // 쓰기 권한 설정
