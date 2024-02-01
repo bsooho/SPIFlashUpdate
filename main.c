@@ -18,8 +18,8 @@
 #define SPI_CHANNEL 0   // /dev/spidev0.0 사용
 //#define SPI_CHANNEL 1 // /dev/spidev0.1 사용
 
-#define START_ADDR  0  // 사용할 메모리의 시작 주소 지정
-//#define START_ADDR  0x10000  // Block1(64kB) = Block2(32kB) = Sector16의 시작 주소
+//#define START_ADDR  0  // 사용할 메모리의 시작 주소 지정
+#define START_ADDR  0x10000  // Block(64kB) 1번 = Block(32kB) 2번 = Sector 16번의 시작 주소에 해당함함
 
 //
 // 쓰기 데이터 덤프 목록 보여주기
