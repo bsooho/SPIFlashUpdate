@@ -123,7 +123,6 @@ int main() {
     // 섹터 단위 삭제, 256byte 단위로 테스트하므로 4kB 즉 4096byte만 지워도 됨
     // 입력할 주소는 Sector No.이므로, 주소를 12bit 오른으로 밀어야 함.
     // Erase data by Sector
-    sect_no=START_ADRR>>12;
     n = IS25LP256_eraseSector(s_sect_no,true);
     printf("Erase Sector(0): n=%d\n",n);
     memset(buf,0,256);  // 임시 버퍼 클리어
