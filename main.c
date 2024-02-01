@@ -126,7 +126,7 @@ int main() {
     n = IS25LP256_eraseSector(s_sect_no,true);
     printf("Erase Sector(0): n=%d\n",n);
     memset(buf,0,256);  // 임시 버퍼 클리어
-    n =  IS25LP256_read (0, buf, 256);
+    n =  IS25LP256_read (s_addr, buf, 256);
     dump(buf,256);
  
     // 데이터 쓰기 테스트 START_ADDR+10부터 A~Z 쓰기
