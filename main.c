@@ -19,7 +19,7 @@
 //#define SPI_CHANNEL 1 // /dev/spidev0.1 사용
 
 //#define START_ADDR  0  // 사용할 메모리의 시작 주소 지정
-#define START_ADDR  0x10000  // Block(64kB) 1번 = Block(32kB) 2번 = Sector 16번의 시작 주소에 해당함함
+//#define START_ADDR  0x10000  // Block(64kB) 1번 = Block(32kB) 2번 = Sector 16번의 시작 주소에 해당함함
 
 //
 // 쓰기 데이터 덤프 목록 보여주기
@@ -76,8 +76,8 @@ int main() {
     uint16_t blk32_no;    // block(32kB) number
     uint16_t blk64_no;    // block(64kB) number
 
-    uint16_t saddr16=START_ADDR;   // start address for 16bit variable (default = 0)
-    uint32_t saadr32=START_ADDR;   // start address for 32bit variable (default = 0)
+    uint16_t saddr16=0x10000;   // start address for 16bit variable
+    uint32_t saddr32=0x10000;   // start address for 32bit variable
   
     // SPI channel 0을 2MHz로 시작
     // Start SPI channel 0 with 2MHz
