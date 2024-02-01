@@ -149,7 +149,7 @@ int main() {
       wdata[i]='0'+i; // 0-9     
     }  
     n =  IS25LP256_pageWrite(s_sect_no, 0, wdata, 10);
-    printf("page_write(%d,0,d,10): n=%d\n",START_ADDR,n);
+    printf("page_write(%d,0,d,10): n=%d\n",start_addr,n);
 
     // 고속 데이터 읽기(주소 0에서 256바이트 가져 오기)
     // First read 256 byte data from Address=0
