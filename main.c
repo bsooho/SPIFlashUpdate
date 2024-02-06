@@ -1,11 +1,13 @@
 //
-// SPI Serial flash 메모리 IS25LP256 동작검증 프로그램
-// IS25LP256의 메모리 영역 구조
-//    총 바이트 수 33554432 (256Mbit)
-//    메모리 공간 32비트 주소 지정 0x00000000 - 0x1FFFFFFF
-//    총 블록 수 512 (64KB/블록, 16섹터/블록)
-//    총 섹터 수 8192 (4KB/섹터)
+// Write ROM file (*.BIN) into SPI Serial flash IS25LP256 by Raspberry PI 4B
+// Structure of IS25LP256 memory
+//    Total byte 33554432 (256Mbit)
+//    Total memory address range (4byte=32bit) 0x00000000 - 0x1FFFFFFF
+//       Real usage
+//    Total number of block 512 (64KB/block, 16sector/block)
+//    Total number of sector 8192 (4KB/sector)
 //    JEDEC ID: 9D-6019
+//    Unique ID: different for individual chip
 //
 
 #include <stdio.h>
@@ -18,13 +20,10 @@
 #define SPI_CHANNEL 0   // /dev/spidev0.0 사용
 //#define SPI_CHANNEL 1 // /dev/spidev0.1 사용
 
-//#define START_ADDR  0  // 사용할 메모리의 시작 주소 지정
-//#define START_ADDR  0x10000  // Block(64kB) 1번 = Block(32kB) 2번 = Sector 16번의 시작 주소에 해당함함
-
 //
-// 쓰기 데이터 덤프 목록 보여주기
-// dt(in) : 데이터 저장 시작 주소 (포인터)
-// n(in)  : 표시할 데이터 개수
+// Dump and show data (256 byte, similar with HEX editor mode)
+// dt(in) : start address of data (pointer)
+// n(in)  : number of data
 //
 void dump(uint8_t *dt, uint32_t n) {
   uint16_t clm = 0;
@@ -37,7 +36,7 @@ void dump(uint8_t *dt, uint32_t n) {
   
   printf("----------------------------------------------------------\n");
   uint16_t i;
-  for (i=0;i<16;i++) vsum[i]=0;  //vsum 모두 0으로 초기화
+  for (i=0;i<16;i++) vsum[i]=0;  //initilize vsum with 0
   
   uint32_t addr;
   for (addr = saddr; addr <= eaddr; addr++) {
@@ -68,15 +67,15 @@ void dump(uint8_t *dt, uint32_t n) {
 
 int main() {
     uint8_t jedc[3];      // JEDEC-ID (3byte, MF7-MF0 ID15-ID8 ID7-ID0)
-    uint8_t buf[256];     // 취득 데이터, 256byte
-    uint8_t wdata[26];    // 데이터 쓰기, 26byte???
+    uint8_t buf[256];     // acquired data, 256byte
+    uint8_t wdata[26];    // data to be written, 26byte
     uint8_t i;            // 범용 변수
-    uint16_t n;           // 취득 데이터 수
+    uint16_t n;           // 리턴값 또는 취득 데이터 수
     uint16_t sect_no;     // sector number
     uint16_t blk32_no;    // block(32kB) number
     uint16_t blk64_no;    // block(64kB) number
 
-    int start_addr=0xFF0000;    // start address for write
+    int start_addr=0;    // start address for write
   
     uint16_t s_sect_no=start_addr>>12;  // start sector number for Input Page Write
     uint32_t s_addr=start_addr;         // start address for 32bit variable
@@ -106,11 +105,11 @@ int main() {
       printf("%x ",buf[i]);
     }
     printf("\n");
-    
+  
     // 현재 저장되어 있는 데이터 읽기
-    // 주소 START_ADDR부터 256바이트 가져오기
+    // 주소 0번지부터 256바이트 가져오기
     memset(buf,0,256);  // 임시 버퍼 클리어
-    n =  IS25LP256_read(s_addr, buf, 256);
+    n =  IS25LP256_read(0, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
