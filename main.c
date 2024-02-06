@@ -88,6 +88,23 @@ int main() {
       printf("WiringPiSetup failed:\n");
       return 1;
     }
+
+    // Set FLASH_UPDATE_GPIO_PIN as an output pin, Active High
+    pinMode(FLASH_UPDATE_GPIO_PIN, OUTPUT);
+
+    while (1) {
+        // Turn the FLASH_UPDATE_GPIO_PIN on
+        digitalWrite(FLASH_UPDATE_GPIO_PIN, HIGH);
+        delay(1000); // Wait for 1 second
+
+        // Turn the FLASH_UPDATE_GPIO_PIN off
+        digitalWrite(FLASH_UPDATE_GPIO_PIN, LOW);
+        delay(1000); // Wait for 1 second
+    }
+
+
+    return 0;
+
   
     // Start SPI channel 0 with 2MHz speed
     if (wiringPiSPISetup(SPI_CHANNEL, 2000000) < 0) {
@@ -121,6 +138,9 @@ int main() {
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
+
+
+  
 
 
   
