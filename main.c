@@ -21,6 +21,8 @@
 #define SPI_CHANNEL 0   // /dev/spidev0.0 사용
 //#define SPI_CHANNEL 1 // /dev/spidev0.1 사용
 
+#define FLASH_UPDATE_GPIO_PIN 14
+
 //
 // Dump and show data (256 byte, similar with HEX editor mode)
 // dt(in) : start address of data (pointer)
@@ -80,6 +82,11 @@ int main() {
   
     uint16_t s_sect_no=start_addr>>12;  // start sector number for Input Page Write
     uint32_t s_addr=start_addr;         // start address for 32bit variable
+
+    // Initialize the wiringPi library
+    if (wiringPiSetup() == -1) {
+      printf("WiringPiSetup failed:\n");
+    }
   
     // Start SPI channel 0 with 2MHz speed
     if (wiringPiSPISetup(SPI_CHANNEL, 2000000) < 0) {
