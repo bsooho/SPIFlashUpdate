@@ -14,6 +14,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#include <wiringPi.h>
 #include <wiringPiSPI.h>
 #include "IS25LP256.h"
 
@@ -68,9 +69,9 @@ void dump(uint8_t *dt, uint32_t n) {
 int main() {
     uint8_t jedc[3];      // JEDEC-ID (3byte, MF7-MF0 ID15-ID8 ID7-ID0)
     uint8_t buf[256];     // acquired data, 256byte
-    uint8_t wdata[26];    // data to be written, 26byte
-    uint8_t i;            // 범용 변수
-    uint16_t n;           // 리턴값 또는 취득 데이터 수
+    uint8_t wdata[256];   // data to be written, 256byte (Maximum 256byte by Input Page Write command)
+    uint8_t i;            // general variable
+    uint16_t n;           // return value or number of data read
     uint16_t sect_no;     // sector number
     uint16_t blk32_no;    // block(32kB) number
     uint16_t blk64_no;    // block(64kB) number
@@ -80,13 +81,12 @@ int main() {
     uint16_t s_sect_no=start_addr>>12;  // start sector number for Input Page Write
     uint32_t s_addr=start_addr;         // start address for 32bit variable
   
-    // SPI channel 0을 2MHz로 시작
-    // Start SPI channel 0 with 2MHz
+    // Start SPI channel 0 with 2MHz speed
     if (wiringPiSPISetup(SPI_CHANNEL, 2000000) < 0) {
       printf("SPISetup failed:\n");
     }
     
-    // 플래시 메모리 사용 시작
+    // Begin of flash memory
     // (채널 번호 지정. 대부분 0번 사용함)
     IS25LP256_begin(SPI_CHANNEL);
     
