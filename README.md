@@ -23,7 +23,7 @@ sudo make
 
 ---
 
-# Wireing  
+# Wiring  
 
 ---
 
