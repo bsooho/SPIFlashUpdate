@@ -98,7 +98,7 @@ int main() {
     // Begin of flash memory
     IS25LP256_begin(SPI_CHANNEL);
     
-    // Read JEDEC ID (It must be )
+    // Read JEDEC ID (It must be 9d 60 19 (3 byte))
     IS25LP256_readManufacturer(jedc);
     printf("JEDEC ID : ");
     for (i=0; i< 3; i++) {
@@ -106,7 +106,7 @@ int main() {
     }
     printf("\n");
     
-    // Unique ID 획득 (16byte)
+    // Unique ID 획득 (16 byte, every memory chip has a distinct or unique value)
     IS25LP256_readUniqieID(buf);
     printf("Unique ID : ");
     for (i=0; i< 16; i++) {
@@ -114,20 +114,21 @@ int main() {
     }
     printf("\n");
   
-    // 현재 저장되어 있는 데이터 읽기
-    // 주소 0번지부터 256바이트 가져오기
+    // Read current stored data
+    // 256 byte from address 0x00
     memset(buf,0,256);  // 임시 버퍼 클리어
     n =  IS25LP256_read(0, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
-    // 현재 저장되어 있는 데이터 고속 읽기
-    // 주소 START_ADDR에서 256바이트까지 획득
-    memset(buf,0,256);
-    n =  IS25LP256_fastread(s_addr, buf, 256);
-    printf("Fast Read Data: n=%d\n",n);
-    dump(buf,256);
 
+
+  
+    return 0;
+
+
+  
+  
     // 섹터 단위 삭제, 256byte 단위로 테스트하므로 4kB 즉 4096byte만 지워도 됨
     // 입력할 주소는 Sector No.이므로, 주소를 12bit 오른으로 밀어야 함.
     // Erase data by Sector
