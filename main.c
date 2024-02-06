@@ -86,18 +86,19 @@ int main() {
     // Initialize the wiringPi library
     if (wiringPiSetup() == -1) {
       printf("WiringPiSetup failed:\n");
+      return 1;
     }
   
     // Start SPI channel 0 with 2MHz speed
     if (wiringPiSPISetup(SPI_CHANNEL, 2000000) < 0) {
       printf("SPISetup failed:\n");
+      return 1;
     }
     
     // Begin of flash memory
-    // (채널 번호 지정. 대부분 0번 사용함)
     IS25LP256_begin(SPI_CHANNEL);
     
-    // JEDEC ID 획득 (3byte)
+    // Read JEDEC ID (It must be )
     IS25LP256_readManufacturer(jedc);
     printf("JEDEC ID : ");
     for (i=0; i< 3; i++) {
