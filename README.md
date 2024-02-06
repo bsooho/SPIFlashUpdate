@@ -37,6 +37,5 @@ sudo make
 - Upto 166MHz clock operation  
 
 ## IS25LP256   
-![IS25LP256](https://user-images.githubusercontent.com/6020549/81263674-0fe0f680-907b-11ea-83dc-f806963e34ae.jpg)
 
 ---
