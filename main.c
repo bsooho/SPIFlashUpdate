@@ -15,7 +15,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
-//#include <wiringPi.h>
 #include <wiringPiSPI.h>
 #include <gpiod.h>
 #include "IS25LP256.h"
@@ -90,17 +89,12 @@ int main() {
     uint16_t s_sect_no=start_addr>>12;  // start sector number for Input Page Write
     uint32_t s_addr=start_addr;         // start address for 32bit variable
 
-
-    printf("check 1!\n");
-  
     // Open GPIO chip
     chip = gpiod_chip_open_by_name(GPIO_CHIP);
     if (!chip) {
         perror("Failed to open GPIO chip");
         return 1;
     }
-
-    printf("check 2!\n");
 
     // Get GPIO line
     line = gpiod_chip_get_line(chip, GPIO_PIN);
@@ -109,8 +103,6 @@ int main() {
         gpiod_chip_close(chip);
         return 1;
     }
-
-    printf("check 3!\n");
 
     // Request GPIO line
     ret = gpiod_line_request_output(line, "gpio-control", 0);
@@ -122,15 +114,11 @@ int main() {
 
     gpiod_line_set_value(line, 0); // Set line low (V)
 
-    printf("check 4!\n");
-
-    sleep(1);  //sleep 1sec
-
-    printf("check 5!\n");
+    sleep(0.1);  //sleep 0.1sec
 
     gpiod_line_set_value(line, 1); // Set line high (3.3V)
 
-    printf("check 6!\n");
+    printf("SPI Bypass Enabled!\n\n");
 
   
     // Start SPI channel 0 with 2MHz speed
@@ -139,12 +127,8 @@ int main() {
       return 1;
     }
 
-    printf("check 7!\n");
-
     // Begin of flash memory
     IS25LP256_begin(SPI_CHANNEL);
-
-    printf("check 8!\n");
 
     // Read JEDEC ID (It must be 9d 60 19 (3 byte))
     IS25LP256_readManufacturer(jedc);
