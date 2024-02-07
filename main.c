@@ -84,7 +84,7 @@ int main() {
     uint16_t blk32_no;    // block(32kB) number
     uint16_t blk64_no;    // block(64kB) number
 
-    int start_addr=0;    // start address for write
+    int start_addr=0xFF0000;    // start address for write
   
     uint16_t s_sect_no=start_addr>>12;  // start sector number for Input Page Write
     uint32_t s_addr=start_addr;         // start address for 32bit variable
@@ -157,11 +157,6 @@ int main() {
     gpiod_line_set_value(line, 0); // Set line low (V)
     printf("SPI Bypass Disabled!\n\n");
     
-    return 0;
-
-
-  
-  
     // 섹터 단위 삭제, 256byte 단위로 테스트하므로 4kB 즉 4096byte만 지워도 됨
     // 입력할 주소는 Sector No.이므로, 주소를 12bit 오른으로 밀어야 함.
     // Erase data by Sector
@@ -204,6 +199,6 @@ int main() {
     // Get fron Status Register1
     buf[0] = IS25LP256_readStatusReg();
     printf("Status Register: %x\n",buf[0]);
-
+  
     return 0;
 }
