@@ -15,8 +15,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
-#include <wiringPiSPI.h>
-#include <gpiod.h>
+#include <gpiod.h>        // GIO control
+#include <wiringPiSPI.h>  // SPI control
 #include "IS25LP256.h"
 
 #define SPI_CHANNEL 0   // /dev/spidev0.0 사용
