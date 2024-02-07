@@ -14,16 +14,16 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
-#include <wiringPi.h>
+//#include <wiringPi.h>
 #include <wiringPiSPI.h>
+#include <gpiod.h>
 #include "IS25LP256.h"
 
 #define SPI_CHANNEL 0   // /dev/spidev0.0 사용
 //#define SPI_CHANNEL 1 // /dev/spidev0.1 사용
 
-#define FLASH_UPDATE_GPIO_PIN 14
-#define HIGH  1
-#define LOW   0
+#define GPIO_CHIP "gpiochip0"
+#define GPIO_PIN 14
 
 //
 // Dump and show data (256 byte, similar with HEX editor mode)
@@ -71,6 +71,10 @@ void dump(uint8_t *dt, uint32_t n) {
 }
 
 int main() {
+    struct gpiod_chip *chip;
+    struct gpiod_line *line;
+    int ret;
+  
     uint8_t jedc[3];      // JEDEC-ID (3byte, MF7-MF0 ID15-ID8 ID7-ID0)
     uint8_t buf[256];     // acquired data, 256byte
     uint8_t wdata[256];   // data to be written, 256byte (Maximum 256byte by Input Page Write command)
@@ -85,35 +89,36 @@ int main() {
     uint16_t s_sect_no=start_addr>>12;  // start sector number for Input Page Write
     uint32_t s_addr=start_addr;         // start address for 32bit variable
 
-    // Initialize the wiringPi library
-    if (wiringPiSetup() == -1) {
-      printf("WiringPiSetup failed:\n");
-      return 1;
+    // Open GPIO chip
+    chip = gpiod_chip_open_by_name(GPIO_CHIP);
+    if (!chip) {
+        perror("Failed to open GPIO chip");
+        return 1;
     }
 
-    // Set FLASH_UPDATE_GPIO_PIN as an output pin, Active High
-    pinMode(FLASH_UPDATE_GPIO_PIN, OUTPUT);
-
-    //Ininitialize SPI0 bypass with Flash memroy: Default is disable
-    digitalWrite(FLASH_UPDATE_GPIO_PIN, LOW);
-    delay(100); // Wait for 0.1 second
-  
- /*
-    while (1) {
-        // Turn the FLASH_UPDATE_GPIO_PIN on
-        digitalWrite(FLASH_UPDATE_GPIO_PIN, HIGH);
-        delay(1000); // Wait for 1 second
-
-        // Turn the FLASH_UPDATE_GPIO_PIN off
-        digitalWrite(FLASH_UPDATE_GPIO_PIN, LOW);
-        delay(1000); // Wait for 1 second
+    // Get GPIO line
+    line = gpiod_chip_get_line(chip, GPIO_PIN);
+    if (!line) {
+        perror("Failed to get GPIO line");
+        gpiod_chip_close(chip);
+        return 1;
     }
-*/
+
+    // Request GPIO line
+    ret = gpiod_line_request_output(line, "gpio-control", 0);
+    if (ret < 0) {
+        perror("Failed to request GPIO line");
+        gpiod_chip_close(chip);
+        return 1;
+    }
+
+    gpiod_line_set_value(line, 0); // Set line low (V)
+
+    sleep(1000);
+  
+    gpiod_line_set_value(line, 1); // Set line high (3.3V)
 
   
-    //Enable(Bypass) SPI0 channel to Flash memory
-    digitalWrite(FLASH_UPDATE_GPIO_PIN, HIGH);
-
   
     // Start SPI channel 0 with 2MHz speed
     if (wiringPiSPISetup(SPI_CHANNEL, 2000000) < 0) {
@@ -147,9 +152,6 @@ int main() {
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
-
-    //Disconnect SPI0 with Flash memory
-    digitalWrite(FLASH_UPDATE_GPIO_PIN, LOW);
   
     return 0;
 
