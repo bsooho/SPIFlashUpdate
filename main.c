@@ -124,7 +124,7 @@ int main() {
 
     printf("check 4!\n");
 
-    sleep(100);  //sleep 0.1sec
+    sleep(1);  //sleep 1sec
 
     printf("check 5!\n");
 
