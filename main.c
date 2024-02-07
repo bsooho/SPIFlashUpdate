@@ -91,7 +91,7 @@ int main() {
     uint32_t s_addr=start_addr;         // start address for 32bit variable
 
 
-    printf("start!\n");
+    printf("check!\n");
   
     // Open GPIO chip
     chip = gpiod_chip_open_by_name(GPIO_CHIP);
@@ -100,6 +100,8 @@ int main() {
         return 1;
     }
 
+    printf("check!\n");
+
     // Get GPIO line
     line = gpiod_chip_get_line(chip, GPIO_PIN);
     if (!line) {
@@ -107,6 +109,8 @@ int main() {
         gpiod_chip_close(chip);
         return 1;
     }
+
+    printf("check!\n");
 
     // Request GPIO line
     ret = gpiod_line_request_output(line, "gpio-control", 0);
