@@ -22,6 +22,8 @@
 //#define SPI_CHANNEL 1 // /dev/spidev0.1 사용
 
 #define FLASH_UPDATE_GPIO_PIN 14
+#define HIGH  1
+#define LOW   0
 
 //
 // Dump and show data (256 byte, similar with HEX editor mode)
