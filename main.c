@@ -112,6 +112,8 @@ int main() {
         return 1;
     }
 
+    printf("Check point!\n");
+  
     while(1){
         gpiod_line_set_value(line, 0); // Set line low (0V)
         sleep(1);
