@@ -132,7 +132,7 @@ int main() {
 
     // Read JEDEC ID (It must be 9d 60 19 (3 byte))
     IS25LP256_readManufacturer(jedc);
-    printf("JEDEC ID : ");
+    printf("\nJEDEC ID : ");
     for (i=0; i< 3; i++) {
       printf("%x ",jedc[i]);
     }
