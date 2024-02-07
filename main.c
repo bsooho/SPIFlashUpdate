@@ -111,24 +111,14 @@ int main() {
         gpiod_chip_close(chip);
         return 1;
     }
-
-    printf("Check point!\n");
-  
-    while(1){
-        gpiod_line_set_value(line, 0); // Set line low (0V)
-        sleep(1);
-        gpiod_line_set_value(line, 1); // Set line high (3.3V)     
-        sleep(1);
-    }
-
   
     gpiod_line_set_value(line, 0); // Set line low (0V)
     printf("SPI Bypass Disabled!\n\n");
 
     sleep(0.1);  //sleep 0.1sec
 
-//    gpiod_line_set_value(line, 1); // Set line high (3.3V)
-//    printf("SPI Bypass Enabled!\n\n");
+    gpiod_line_set_value(line, 1); // Set line high (3.3V)
+    printf("SPI Bypass Enabled!\n\n");
 
   
     // Start SPI channel 0 with 2MHz speed
