@@ -14,6 +14,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#inlude <unistd.h>
 //#include <wiringPi.h>
 #include <wiringPiSPI.h>
 #include <gpiod.h>
@@ -114,7 +115,7 @@ int main() {
 
     gpiod_line_set_value(line, 0); // Set line low (V)
 
-    usleep(100000);  //sleep 0.1sec
+    sleep(1000);  //sleep 1sec
   
     gpiod_line_set_value(line, 1); // Set line high (3.3V)
 
