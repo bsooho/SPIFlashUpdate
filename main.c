@@ -208,8 +208,8 @@ int main() {
     printf("Status Register: %x\n",buf[0]);
 
     // Disable SPI0 Bypass lines
-    gpiod_line_set_value(line, 0); // Set line low (V)
-    printf("SPI Bypass Disabled!\n\n");
+    //gpiod_line_set_value(line, 0); // Set line low (V)
+    //printf("SPI Bypass Disabled!\n\n");
   
     return 0;
 }
