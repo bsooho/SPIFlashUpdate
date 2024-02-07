@@ -90,6 +90,9 @@ int main() {
     uint16_t s_sect_no=start_addr>>12;  // start sector number for Input Page Write
     uint32_t s_addr=start_addr;         // start address for 32bit variable
 
+
+    printf("start!\n");
+  
     // Open GPIO chip
     chip = gpiod_chip_open_by_name(GPIO_CHIP);
     if (!chip) {
