@@ -14,7 +14,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
-#inlude <unistd.h>
+#include <unistd.h>
 //#include <wiringPi.h>
 #include <wiringPiSPI.h>
 #include <gpiod.h>
