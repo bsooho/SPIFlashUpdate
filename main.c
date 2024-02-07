@@ -113,11 +113,11 @@ int main() {
     }
 
     gpiod_line_set_value(line, 0); // Set line low (V)
+    printf("SPI Bypass Disabled!\n\n");
 
     sleep(0.1);  //sleep 0.1sec
 
     gpiod_line_set_value(line, 1); // Set line high (3.3V)
-
     printf("SPI Bypass Enabled!\n\n");
 
   
@@ -155,7 +155,8 @@ int main() {
 
     // Disable SPI0 Bypass lines
     gpiod_line_set_value(line, 0); // Set line low (V)
-  
+    printf("SPI Bypass Disabled!\n\n");
+    
     return 0;
 
 
