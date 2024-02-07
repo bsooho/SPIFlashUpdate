@@ -94,6 +94,11 @@ int main() {
     // Set FLASH_UPDATE_GPIO_PIN as an output pin, Active High
     pinMode(FLASH_UPDATE_GPIO_PIN, OUTPUT);
 
+    //Ininitialize SPI0 bypass with Flash memroy: Default is disable
+    digitalWrite(FLASH_UPDATE_GPIO_PIN, LOW);
+    delay(100); // Wait for 0.1 second
+  
+ /*
     while (1) {
         // Turn the FLASH_UPDATE_GPIO_PIN on
         digitalWrite(FLASH_UPDATE_GPIO_PIN, HIGH);
@@ -103,9 +108,11 @@ int main() {
         digitalWrite(FLASH_UPDATE_GPIO_PIN, LOW);
         delay(1000); // Wait for 1 second
     }
+*/
 
-
-    return 0;
+  
+    //Enable(Bypass) SPI0 channel to Flash memory
+    digitalWrite(FLASH_UPDATE_GPIO_PIN, HIGH);
 
   
     // Start SPI channel 0 with 2MHz speed
@@ -141,10 +148,8 @@ int main() {
     dump(buf,256);
 
 
-
-  
-
-
+    //Disconnect SPI0 with Flash memory
+    digitalWrite(FLASH_UPDATE_GPIO_PIN, LOW);
   
     return 0;
 
