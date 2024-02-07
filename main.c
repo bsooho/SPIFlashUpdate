@@ -153,6 +153,8 @@ int main() {
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
+    // Disable SPI0 Bypass lines
+    gpiod_line_set_value(line, 0); // Set line low (V)
   
     return 0;
 
