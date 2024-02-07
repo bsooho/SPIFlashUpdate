@@ -91,7 +91,7 @@ int main() {
     uint32_t s_addr=start_addr;         // start address for 32bit variable
 
 
-    printf("check!\n");
+    printf("check 1!\n");
   
     // Open GPIO chip
     chip = gpiod_chip_open_by_name(GPIO_CHIP);
@@ -100,7 +100,7 @@ int main() {
         return 1;
     }
 
-    printf("check!\n");
+    printf("check 2!\n");
 
     // Get GPIO line
     line = gpiod_chip_get_line(chip, GPIO_PIN);
@@ -110,7 +110,7 @@ int main() {
         return 1;
     }
 
-    printf("check!\n");
+    printf("check 3!\n");
 
     // Request GPIO line
     ret = gpiod_line_request_output(line, "gpio-control", 0);
@@ -122,21 +122,30 @@ int main() {
 
     gpiod_line_set_value(line, 0); // Set line low (V)
 
-    sleep(1000);  //sleep 1sec
-  
+    printf("check 4!\n");
+
+    sleep(100);  //sleep 0.1sec
+
+    printf("check 5!\n");
+
     gpiod_line_set_value(line, 1); // Set line high (3.3V)
 
-  
+    printf("check 6!\n");
+
   
     // Start SPI channel 0 with 2MHz speed
     if (wiringPiSPISetup(SPI_CHANNEL, 2000000) < 0) {
       printf("SPISetup failed:\n");
       return 1;
     }
-    
+
+    printf("check 7!\n");
+
     // Begin of flash memory
     IS25LP256_begin(SPI_CHANNEL);
-    
+
+    printf("check 8!\n");
+
     // Read JEDEC ID (It must be 9d 60 19 (3 byte))
     IS25LP256_readManufacturer(jedc);
     printf("JEDEC ID : ");
