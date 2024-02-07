@@ -117,8 +117,8 @@ int main() {
 
     sleep(0.1);  //sleep 0.1sec
 
-    gpiod_line_set_value(line, 1); // Set line high (3.3V)
-    printf("SPI Bypass Enabled!\n\n");
+//    gpiod_line_set_value(line, 1); // Set line high (3.3V)
+//    printf("SPI Bypass Enabled!\n\n");
 
   
     // Start SPI channel 0 with 2MHz speed
