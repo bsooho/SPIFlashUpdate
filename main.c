@@ -165,8 +165,8 @@ int main() {
     dump(buf,256);
 
     // Disable SPI0 Bypass lines
-    gpiod_line_set_value(line, 0); // Set line low (V)
-    printf("SPI Bypass Disabled!\n\n");
+    //gpiod_line_set_value(line, 0); // Set line low (V)
+    //printf("SPI Bypass Disabled!\n\n");
     
     // 섹터 단위 삭제, 256byte 단위로 테스트하므로 4kB 즉 4096byte만 지워도 됨
     // 입력할 주소는 Sector No.이므로, 주소를 12bit 오른으로 밀어야 함.
