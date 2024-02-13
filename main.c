@@ -273,30 +273,22 @@ int main() {
     ssize_t read_bytes;
     uint32_t flash_address = 0x0; // Start address in SPI Flash where data will be written
     uint16_t int_addr;  //internal address in 1 sector (4096bytes)
-
-    printf("Check point!!!\n\n");
   
     while ((read_bytes = fread(sector_buf, 1, 4096, binaryFile)) > 0) {
       int_addr=0;  //initialize int_addr
-
-      printf("Check point!!!\n\n");
       
       while (int_addr < 0x1000){
-    printf("Check point!!!\n\n");
-
+ 
         for (int j=0; j<256; j++) {
           buf[j] = sector_buf[int_addr+j];
         }
-    printf("Check point!!!\n\n");
-
-        dump(buf,256);
-        
+   
         n = IS25LP256_pageWrite(flash_address>>12, int_addr, buf, CHUNK_SIZE);
         printf("flash address=%08x   read bytes = %d   write bytes = %d   int_addr = %d\n",flash_address, read_bytes, n-4, int_addr);
 
         memset(buf,0,256);  // 임시 버퍼 클리어
         n =  IS25LP256_read(flash_address+int_addr, buf, 256);
-//        dump(buf,256);
+        dump(buf,256);
 
         int_addr += 0x100;
       }
