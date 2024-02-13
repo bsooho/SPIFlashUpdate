@@ -103,6 +103,9 @@ int main() {
     int start_addr=0xFF0000;    // start address for write
   
     uint16_t s_sect_no=start_addr>>12;  // start sector number for Input Page Write
+    uint16_t s_blk32_no=start_addr>>15;  // start block32 number for Input Page Write
+    uint16_t s_blk64_no=start_addr>>16;  // start block64 number for Input Page Write
+
     uint32_t s_addr=start_addr;         // assign start address at 32bit variable
 
     size_t fileSize;
