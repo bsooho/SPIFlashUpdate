@@ -83,19 +83,34 @@ int main() {
     int ret;
   
     uint8_t jedc[3];      // JEDEC-ID (3byte, MF7-MF0 ID15-ID8 ID7-ID0)
-    uint8_t buf[256];     // acquired data, 256byte
-    uint8_t wdata[256];   // data to be written, 256byte (Maximum 256byte by Input Page Write command)
+    uint8_t buf[CHUNK_SIZE];     // acquired data, 256byte
+    uint8_t wdata[CHUNK_SIZE];   // data to be written, 256byte (Maximum 256byte by Input Page Write command)
     uint8_t i;            // general variable
     uint16_t n;           // return value or number of data read
     uint16_t sect_no;     // sector number
     uint16_t blk32_no;    // block(32kB) number
     uint16_t blk64_no;    // block(64kB) number
 
+    int spi_fd, file_fd;
+    ssize_t bytes_read;
+  
     int start_addr=0xFF0000;    // start address for write
   
     uint16_t s_sect_no=start_addr>>12;  // start sector number for Input Page Write
     uint32_t s_addr=start_addr;         // assign start address at 32bit variable
 
+  
+    // Open binary file
+    file_fd = open(FILENAME, O_RDONLY);
+    if (file_fd < 0) {
+        perror("Error opening binary file");
+        close(spi_fd);
+        return 1;
+    }
+
+    return 0;
+
+  
     // Open GPIO chip
     chip = gpiod_chip_open_by_name(GPIO_CHIP);
     if (!chip) {
