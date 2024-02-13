@@ -129,7 +129,7 @@ int main() {
   
     ssize_t bytes_read;
   
-    int start_addr=0xFF0000;    // start address for write
+    int start_addr=0x00;    // start address for write
   
     uint16_t s_sect_no=start_addr>>12;  // start sector number for Input Page Write
     uint16_t s_blk32_no=start_addr>>15;  // start block32 number for Input Page Write
