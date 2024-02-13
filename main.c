@@ -275,16 +275,14 @@ int main() {
     uint32_t flash_address = 0x0; // Start address in SPI Flash where data will be written
     uint int_addr;  //internal address within a sector (total 4096byte)
 
-//    while ((read_bytes = fread(sector_buf, 1, SECTOR_SIZE, binaryFile)) > 0) {
-    while ((read_bytes = fread(buf, 1, 256, binaryFile)) > 0) {
+    while ((read_bytes = fread(sector_buf, 1, SECTOR_SIZE, binaryFile)) > 0) {
+//    while ((read_bytes = fread(buf, 1, 256, binaryFile)) > 0) {
 
       int_addr=0;  //initialize int_addr
   
       for (int j = 0; j < CHUNK_SIZE; j++) {
-//        buf[j] = sector_buf[int_addr+j];
+        buf[j] = sector_buf[int_addr+j];
       }
-      dump(buf,256);
-      return 0;
       
       while (int_addr < SECTOR_SIZE){
  
