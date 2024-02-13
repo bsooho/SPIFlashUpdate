@@ -280,6 +280,8 @@ int main() {
 //   while ((read_bytes = fread(sector_buf, 1, SECTOR_SIZE, binaryFile)) > 0) {
     while ((read_bytes = fread(buf, 1, CHUNK_SIZE, binaryFile)) > 0) {
 
+      dump(buf,256);
+      
       if (int_addr == SECTOR_SIZE){
         int_addr=0;  //initialize int_addr
       }
@@ -299,7 +301,7 @@ int main() {
 
       k++;
 
-      if (k>3){
+      if (k>1){
         return 0;
       }
     }
