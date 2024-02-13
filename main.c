@@ -120,6 +120,7 @@ int main() {
   
     uint8_t jedc[3];      // JEDEC-ID (3byte, MF7-MF0 ID15-ID8 ID7-ID0)
     uint8_t buf[CHUNK_SIZE];     // acquired data, 256byte
+    uint8_t sector_buf[4096];    // acquired data for every sector, 4096byte
     uint8_t wdata[CHUNK_SIZE];   // data to be written, 256byte (Maximum 256byte by Input Page Write command)
     uint8_t i;            // general variable
     uint16_t n;           // return value or number of data read
@@ -282,7 +283,7 @@ int main() {
     uint32_t flash_address = 0x0; // Start address in SPI Flash where data will be written
     uint16_t int_addr;  //internal address in 1 sector (4096bytes)
   
-    while ((read_bytes = fread(buf, 1, CHUNK_SIZE, binaryFile)) > 0) {
+    while ((read_bytes = fread(sector_buf, 1, 4096, binaryFile)) > 0) {
       int_addr=0;  //initialize int_addr
       
       while (int_addr < 0x1000){      
