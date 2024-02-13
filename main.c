@@ -315,8 +315,7 @@ int main() {
     ssize_t read_bytes;
     uint32_t flash_address = 0x0; // Start address in SPI Flash where data will be written
     int int_addr;  //internal address in 1 sector (4096bytes)
-    while ((read_bytes = fread(buf, 1, CHUNK_SIZE, binaryFile)) > 0) {
-      dump(buf,256);
+    while ((read_bytes = fread(buf, 1, CHUNK_SIZE, fileContent)) > 0) {
       
       int_addr = 0;
       
@@ -387,6 +386,9 @@ int main() {
     dump(buf,256);
 */
 
+  
+    // Free allocated memory
+    free(fileContent);
 
   
     // 상태 레지스터 가져오기
