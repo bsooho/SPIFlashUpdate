@@ -87,7 +87,7 @@ int main() {
     int start_addr=0xFF0000;    // start address for write
   
     uint16_t s_sect_no=start_addr>>12;  // start sector number for Input Page Write
-    uint32_t s_addr=start_addr;         // start address for 32bit variable
+    uint32_t s_addr=start_addr;         // assign start address at 32bit variable
 
     // Open GPIO chip
     chip = gpiod_chip_open_by_name(GPIO_CHIP);
@@ -115,7 +115,7 @@ int main() {
     gpiod_line_set_value(line, 0); // Set line low (0V)
     printf("SPI Bypass Disabled!\n\n");
 
-    usleep(100000);  //sleep 0.1sec
+    usleep(500000);  //sleep 0.5sec
 
     gpiod_line_set_value(line, 1); // Set line high (3.3V)
     printf("SPI Bypass Enabled!\n\n");
@@ -149,7 +149,7 @@ int main() {
     printf("\n");
   
     // Read current stored data
-    // 256 byte from address 0x00
+    // 256 byte from address s_addr
     memset(buf,0,256);  // 임시 버퍼 클리어
     n =  IS25LP256_read(s_addr, buf, 256);
     printf("Read Data: n=%d\n",n);
