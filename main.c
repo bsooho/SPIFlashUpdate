@@ -276,7 +276,7 @@ int main() {
     uint16_t int_addr;  //internal address within a sector (total 4096byte)
 
   
-  read_bytes = fread(sector_buf, 1, SECTOR_SIZE, binaryFile)
+  read_bytes = fread(sector_buf, 1, SECTOR_SIZE, binaryFile);
   for (int j = 0; j < CHUNK_SIZE; j++) {
     buf[j] = sector_buf[int_addr+j];
   }
