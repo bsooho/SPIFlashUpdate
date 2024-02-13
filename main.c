@@ -282,7 +282,7 @@ int main() {
 //   while ((read_bytes = fread(sector_buf, 1, SECTOR_SIZE, binaryFile)) > 0) {
     while ((read_bytes = fread(buf, 1, CHUNK_SIZE, binaryFile)) > 0) {
 
-      dump(buf,256);
+//      dump(buf,256);
       
       if (int_addr == SECTOR_SIZE){
         int_addr=0;  //initialize int_addr
@@ -293,9 +293,9 @@ int main() {
       n = IS25LP256_pageWrite(sector_no, int_addr, buf, CHUNK_SIZE);
       printf("sector no=%08x  int_addr = %d\nread bytes = %d   write bytes = %d\n", sector_no, int_addr, read_bytes, n-4);
 
-      memset(buf,0,256);  // 임시 버퍼 클리어
-      n =  IS25LP256_read(flash_address, buf, 256);
-      dump(buf,256);
+//      memset(buf,0,256);  // 임시 버퍼 클리어
+//      n =  IS25LP256_read(flash_address, buf, 256);
+//      dump(buf,256);
 
       int_addr += CHUNK_SIZE;
 
