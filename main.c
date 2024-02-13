@@ -285,7 +285,7 @@ int main() {
     while ((read_bytes = fread(buf, 1, CHUNK_SIZE, binaryFile)) > 0) {
       int_addr=0;  //initialize int_addr
       
-      while (int_addr < 16){      
+      while (int_addr < 0x1000){      
         n = IS25LP256_pageWrite(flash_address>>12, int_addr, buf, CHUNK_SIZE);
         printf("flash address=%08x   read bytes = %d   write bytes = %d\n",flash_address, read_bytes, n-4);
 
