@@ -329,7 +329,7 @@ int main() {
       dump(buf,256);
 
       flash_address += read_bytes;
-      
+      printf("flash address=%08x\n",flash_address);
       return 0;
     }
 
