@@ -162,7 +162,7 @@ int main() {
     free(fileContent);
 
   
-    wait_for_space(); // Program waits here for space bar press
+//    wait_for_space(); // Program waits here for space bar press
   
 
     // Open GPIO chip
@@ -206,7 +206,7 @@ int main() {
     }
 
 
-    wait_for_space(); // Program waits here for space bar press
+//    wait_for_space(); // Program waits here for space bar press
 
   
     // Begin of flash memory
