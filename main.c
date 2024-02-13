@@ -121,7 +121,7 @@ int main() {
   
     uint8_t jedc[3];      // JEDEC-ID (3byte, MF7-MF0 ID15-ID8 ID7-ID0)
     uint8_t buf[CHUNK_SIZE];     // acquired data, 256byte
-    uint16_t sector_buf[SECTOR_SIZE];    // acquired data for every sector, 4096byte
+//    uint16_t sector_buf[SECTOR_SIZE];    // acquired data for every sector, 4096byte
     uint8_t wdata[CHUNK_SIZE];   // data to be written, 256byte (Maximum 256byte by Input Page Write command)
     uint8_t i;            // general variable
     uint16_t n;           // return value or number of data read
@@ -272,33 +272,27 @@ int main() {
 
     // write BIN file in SPI Flash memory
     ssize_t read_bytes;
-    uint32_t flash_address = 0x0; // Start address in SPI Flash where data will be written
-    uint int_addr;  //internal address within a sector (total 4096byte)
-
-    while ((read_bytes = fread(sector_buf, 1, SECTOR_SIZE, binaryFile)) > 0) {
-//    while ((read_bytes = fread(buf, 1, 256, binaryFile)) > 0) {
-
-      int_addr=0;  //initialize int_addr
+    uint32_t flash_address = 0; // Start address in SPI Flash where data will be written
+    uint32_t sector_no = 0;
+    uint int_addr=0;  //internal address within a sector (total 4096byte)
   
-      for (int j = 0; j < CHUNK_SIZE; j++) {
-        buf[j] = sector_buf[int_addr+j];
+//   while ((read_bytes = fread(sector_buf, 1, SECTOR_SIZE, binaryFile)) > 0) {
+    while ((read_bytes = fread(buf, 1, CHUNK_SIZE, binaryFile)) > 0) {
+
+      if (int_addr == SECTOR_SIZE){
+        int_addr=0;  //initialize int_addr
       }
+
+      sector_no = flash_address>>12;
       
-      while (int_addr < SECTOR_SIZE){
- 
-        for (int j = 0; j < CHUNK_SIZE; j++) {
-          buf[j] = sector_buf[int_addr+j];
-        }
-   
-        n = IS25LP256_pageWrite(flash_address>>12, int_addr, buf, CHUNK_SIZE);
-        printf("flash address=%08x   read bytes = %d   write bytes = %d   int_addr = %d\n",flash_address, read_bytes, n-4, int_addr);
+      n = IS25LP256_pageWrite(sector_no, int_addr, buf, CHUNK_SIZE);
+      printf("flash address=%08x   read bytes = %d   write bytes = %d   int_addr = %d\n",flash_address, read_bytes, n-4, int_addr);
 
-        memset(buf,0,256);  // 임시 버퍼 클리어
-        n =  IS25LP256_read(flash_address+int_addr, buf, 256);
-        dump(buf,256);
+      memset(buf,0,256);  // 임시 버퍼 클리어
+      n =  IS25LP256_read(flash_address+int_addr, buf, 256);
+      dump(buf,256);
 
-        int_addr += CHUNK_SIZE;
-      }
+      int_addr += CHUNK_SIZE;
 
       flash_address += read_bytes;
 
