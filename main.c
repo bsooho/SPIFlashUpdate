@@ -301,7 +301,7 @@ int main() {
       }
 
       flash_address += read_bytes;
-
+      printf("flash address=%08x   read bytes = %d   write bytes = %d   int_addr = %d\n",flash_address, read_bytes, n-4, int_addr);
       return 0;
     }
 
