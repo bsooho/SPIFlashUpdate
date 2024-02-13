@@ -123,9 +123,9 @@ int main() {
     uint8_t wdata[CHUNK_SIZE];   // data to be written, 256byte (Maximum 256byte by Input Page Write command)
     uint8_t i;            // general variable
     uint16_t n;           // return value or number of data read
-    uint16_t sect_no;     // sector number
-    uint16_t blk32_no;    // block(32kB) number
-    uint16_t blk64_no;    // block(64kB) number
+//    uint16_t sect_no;     // sector number
+//    uint16_t blk32_no;    // block(32kB) number
+//    uint16_t blk64_no;    // block(64kB) number
 
   //  int spi_fd;
     int file_fd;
