@@ -284,23 +284,23 @@ int main() {
   
     while ((read_bytes = fread(sector_buf, 1, 4096, binaryFile)) > 0) {
       int_addr=0;  //initialize int_addr
-
-      wait_for_space(); // Program waits here for space bar press
       
-        while (int_addr < 0x1000){      
+      while (int_addr < 0x1000){      
         n = IS25LP256_pageWrite(flash_address>>12, int_addr, buf, CHUNK_SIZE);
         printf("flash address=%08x   read bytes = %d   write bytes = %d\n",flash_address, read_bytes, n-4);
 
         memset(buf,0,256);  // 임시 버퍼 클리어
-        n =  IS25LP256_read(int_addr, buf, 256);
+        n =  IS25LP256_read(flash_address+int_addr, buf, 256);
         dump(buf,256);
 
-        flash_address += read_bytes;
         printf("flash address=%08x\n",flash_address);
         printf("internal address=%08x\n\n",int_addr);
 
         int_addr += 0x100;
-        }
+      }
+
+      flash_address += 0x1000;
+
       return 0;
     }
 
