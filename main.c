@@ -311,20 +311,26 @@ int main() {
     uint32_t flash_address = 0; // Start address in SPI Flash where data will be written
     while ((read_bytes = read(binaryFile, buf, CHUNK_SIZE)) > 0) {
       n = IS25LP256_pageWrite(flash_address, 0, buf, CHUNK_SIZE);
-      printf("flash address=%08x    read bytes = %d\n",flash_address, read_bytes);
+      printf("flash address=%08x    read bytes = %d    write bytes = %d\n",flash_address, read_bytes, n);
       flash_address += read_bytes;
     }
 
+
+    printf("Write is done!!!\nPress the space bar...\n");
+    wait_for_space(); // Program waits here for space bar press
+ 
+  
     // Read current stored data
     // 256 byte from address s_addr
     memset(buf,0,256);  // 임시 버퍼 클리어
     n =  IS25LP256_read(s_addr, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
-  
-    printf("Write is done!!!\nPress the space bar...\n");
-    wait_for_space(); // Program waits here for space bar press
 
+    memset(buf,0,256);  // 임시 버퍼 클리어
+    n =  IS25LP256_read(s_addr+256, buf, 256);
+    printf("Read Data: n=%d\n",n);
+    dump(buf,256);
   
 
   /*
