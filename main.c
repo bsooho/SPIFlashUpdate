@@ -284,6 +284,7 @@ int main() {
 //        buf[j] = sector_buf[int_addr+j];
       }
       dump(buf,256);
+      return 0;
       
       while (int_addr < SECTOR_SIZE){
  
