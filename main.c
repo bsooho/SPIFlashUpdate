@@ -120,7 +120,7 @@ int main() {
   
     uint8_t jedc[3];      // JEDEC-ID (3byte, MF7-MF0 ID15-ID8 ID7-ID0)
     uint8_t buf[CHUNK_SIZE];     // acquired data, 256byte
-    uint8_t sector_buf[4096];    // acquired data for every sector, 4096byte
+    uint16_t sector_buf[4096];    // acquired data for every sector, 4096byte
     uint8_t wdata[CHUNK_SIZE];   // data to be written, 256byte (Maximum 256byte by Input Page Write command)
     uint8_t i;            // general variable
     uint16_t n;           // return value or number of data read
