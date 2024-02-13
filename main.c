@@ -285,7 +285,7 @@ int main() {
     dump(buf,256);
 */
 
-    printf("We will start to erase all...\nPress the space bar...\n");
+    printf("We will start to erase all...\n");
     wait_for_space(); // Program waits here for space bar press
     printf("Erase all is started...\n");
 
@@ -299,7 +299,7 @@ int main() {
     dump(buf,256);
 
   
-    printf("Erase all is done!!!\nPress the space bar...\n");
+    printf("Erase all is done!!!\n");
     wait_for_space(); // Program waits here for space bar press
 
 
