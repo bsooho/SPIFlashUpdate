@@ -314,7 +314,7 @@ int main() {
     // write BIN file in SPI Flash memory
     ssize_t read_bytes;
     uint32_t flash_address = 0x0; // Start address in SPI Flash where data will be written
-    uint8_5 int_addr;  //internal address in 1 sector (4096bytes)
+    int int_addr;  //internal address in 1 sector (4096bytes)
     while ((read_bytes = fread(buf, 1, CHUNK_SIZE, binaryFile)) > 0) {
       dump(buf,256);
       
@@ -335,8 +335,6 @@ int main() {
 
         int_addr++;
       }
-
-      dump(
     }
 
 
