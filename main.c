@@ -30,7 +30,8 @@
 #define GPIO_CHIP "gpiochip0"
 #define GPIO_PIN 14
 
-#define FILENAME "./FLASH_EN.bin"		// File name to be written to SPI Flash memory
+//#define FILENAME "./FLASH_EN.bin"		// File name to be written to SPI Flash memory
+#define FILENAME "./LED_Blink_Fast.bin"		// File name to be written to SPI Flash memory
 
 #define SPI_MODE  0          // SPI mode among 0, 1, 2 or 3
 #define SPI_DEVICE "/dev/spidev0.0"  // SPI channel 0
@@ -252,13 +253,14 @@ int main() {
 
 
 //  Erase All. It takes 1~3 min.
-//  n = IS25LP256_eraseAll(true);
-//  printf("Erase All: n=%d\n",n);
+    n = IS25LP256_eraseAll(true);
+    printf("Erase All: n=%d\n",n);
 
+/*
 //  Erase first 1 block 64KB.
     n = IS25LP256_erase64Block(0, true);
     printf("Erase Block 0 in 64kB: n=%d\n",n);
-
+*/
   
     // Check if erase is done
     memset(buf,0,256);  // 임시 버퍼 클리어
