@@ -30,6 +30,8 @@
 #define GPIO_PIN 14
 
 #define FILENAME "FLASH_EN.bin"		// File name to be written to SPI Flash memory
+
+#define SPI_MODE  0          // SPI mode among 0, 1, 2 or 3
 #define SPI_DEVICE "/dev/spidev0.0"
 #define SPI_SPEED_HZ 2000000	// SPI clock speed at 2MHz
 #define CHUNK_SIZE 256			// unit amount per write operation
@@ -173,7 +175,7 @@ int main() {
     printf("Setup SPI0 channel\n");
   
     // Start SPI channel 0 with 2MHz speed
-    if (wiringPiSPISetup(SPI_CHANNEL, SPI_SPEED_HZ) < 0) {
+    if (wiringPiSPISetupMode(SPI_CHANNEL, SPI_SPEED_HZ, SPI_MODE) < 0) {
       printf("SPISetup failed:\n");
       return 1;
     }
