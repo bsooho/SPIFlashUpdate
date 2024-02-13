@@ -273,7 +273,11 @@ int main() {
       int_addr=0;  //initialize int_addr
       
       while (int_addr < 0x1000){
-        buf = sector_buf[int_addr] & 0xFF;
+
+        for (uint8_t j=0; j<256; j++) {
+          buf[j] = sector_buf[int_addr+j];
+        }
+
         dump(buf,256);
         
         n = IS25LP256_pageWrite(flash_address>>12, int_addr, buf, CHUNK_SIZE);
