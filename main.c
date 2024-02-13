@@ -29,7 +29,7 @@
 #define GPIO_CHIP "gpiochip0"
 #define GPIO_PIN 14
 
-#define FILENAME "FLASH_EN.bin"		// File name to be written to SPI Flash memory
+#define FILENAME "./FLASH_EN.bin"		// File name to be written to SPI Flash memory
 
 #define SPI_MODE  0          // SPI mode among 0, 1, 2 or 3
 #define SPI_DEVICE "/dev/spidev0.0"  // SPI channel 0
@@ -95,7 +95,9 @@ int main() {
     uint16_t blk32_no;    // block(32kB) number
     uint16_t blk64_no;    // block(64kB) number
 
-    int spi_fd, file_fd;
+  //  int spi_fd;
+    int file_fd;
+  
     ssize_t bytes_read;
   
     int start_addr=0xFF0000;    // start address for write
@@ -103,7 +105,31 @@ int main() {
     uint16_t s_sect_no=start_addr>>12;  // start sector number for Input Page Write
     uint32_t s_addr=start_addr;         // assign start address at 32bit variable
 
+    size_t fileSize;
 
+    // Open binary file for reading
+    FILE* binaryFile = fopen(FILENAME, "rb");
+    if (binaryFile == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+
+    // Get the file size
+    fseek(binaryFile, 0, SEEK_END);
+    fileSize = ftell(binaryFile);
+    fseek(binaryFile, 0, SEEK_SET);
+
+    // Allocate memory for the file content
+    uint8_t *fileContent = (uint8_t *)malloc(fileSize);
+    if (fileContent == NULL) {
+        perror("Memory allocation error");
+        fclose(binaryFile);
+        return 1;
+    }
+
+  return 0;
+  
+/*
     // Open binary file
     file_fd = open(FILENAME, O_RDONLY);
     if (file_fd < 0) {
@@ -111,9 +137,10 @@ int main() {
         close(spi_fd);
         return 1;
     }
-
+*/
   
-  /*
+  /* Below is not required since WiringPiSPI library is used in this code.
+  
     // Open SPI device
     spi_fd = open(SPI_DEVICE, O_RDWR);
     if (spi_fd < 0) {
