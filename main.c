@@ -335,6 +335,7 @@ int main() {
 
         int_addr++;
       }
+      return 0;
     }
 
 
