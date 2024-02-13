@@ -205,6 +205,10 @@ int main() {
       return 1;
     }
 
+
+
+
+  
     // Begin of flash memory
     IS25LP256_begin(SPI_CHANNEL);
 
