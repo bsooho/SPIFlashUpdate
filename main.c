@@ -117,6 +117,7 @@ int main() {
     // Get the file size
     fseek(binaryFile, 0, SEEK_END);
     fileSize = ftell(binaryFile);
+    printf ("File size: %d\n",fileSize);
     fseek(binaryFile, 0, SEEK_SET);
 
     // Allocate memory for the file content
@@ -126,8 +127,6 @@ int main() {
         fclose(binaryFile);
         return 1;
     }
-
-  return 0;
   
 /*
     // Open binary file
