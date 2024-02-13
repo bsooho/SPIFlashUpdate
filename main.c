@@ -276,6 +276,8 @@ int main() {
     dump(buf,256);
 
 
+  return 0;
+  
   /*
     // Erase data by Sector from start address
     n = IS25LP256_eraseSector(s_sect_no,true);
