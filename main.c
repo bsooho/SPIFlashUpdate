@@ -32,7 +32,7 @@
 #define FILENAME "FLASH_EN.bin"		// File name to be written to SPI Flash memory
 
 #define SPI_MODE  0          // SPI mode among 0, 1, 2 or 3
-#define SPI_DEVICE "/dev/spidev0.0"
+#define SPI_DEVICE "/dev/spidev0.0"  // SPI channel 0
 #define SPI_SPEED_HZ 2000000	// SPI clock speed at 2MHz
 #define CHUNK_SIZE 256			// unit amount per write operation
 
