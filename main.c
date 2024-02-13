@@ -160,6 +160,12 @@ int main() {
         return 1;
     }
 
+    // Read file content into the allocated memory
+    fread(fileContent, 1, fileSize, binaryFile);
+
+    // Close the file
+    fclose(binaryFile);
+
   
     wait_for_space(); // Program waits here for space bar press
 
@@ -315,8 +321,11 @@ int main() {
     ssize_t read_bytes;
     uint32_t flash_address = 0x0; // Start address in SPI Flash where data will be written
     int int_addr;  //internal address in 1 sector (4096bytes)
-    while ((read_bytes = fread(buf, 1, CHUNK_SIZE, fileContent)) > 0) {
-      
+
+
+  
+      while ((read_bytes = fread(buf, 1, CHUNK_SIZE, binaryFile)) > 0) {
+  
       int_addr = 0;
       
       while (int_addr < 16){
