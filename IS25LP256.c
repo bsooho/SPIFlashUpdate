@@ -8,7 +8,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include <wiringPi.h>
+//#include <wiringPi.h>
 #include <wiringPiSPI.h>
 
 #include "IS25LP256.h"
@@ -221,7 +221,7 @@ bool IS25LP256_eraseSector(uint16_t sect_no, bool flgwait) {
  
   // 처리 대기
   while(IS25LP256_IsBusy() & flgwait) {
-    delay(10);    // 10msec 마다 체크 (100~300msec 소요)
+    usleep(10000);    // 10msec 마다 체크 (100~300msec 소요)
   }
   return true;
 }
@@ -255,7 +255,7 @@ bool IS25LP256_erase32Block(uint16_t blk32_no, bool flgwait) {
  
   // 처리 대기
   while(IS25LP256_IsBusy() & flgwait) {
-    delay(50);    // 50msec 마다 체크 (140~500msec 소요)
+    usleep(50000);    // 50msec 마다 체크 (140~500msec 소요)
   }
   return true;
 }
@@ -289,7 +289,7 @@ bool IS25LP256_erase64Block(uint16_t blk64_no, bool flgwait) {
  
   // 처리 대기
   while(IS25LP256_IsBusy() & flgwait) {
-    delay(50);    // 50msec 마다 체크 (170 ~ 1000msec 소요)
+    usleep(50000);    // 50msec 마다 체크 (170 ~ 1000msec 소요)
   }
   return true;
 }
@@ -314,7 +314,7 @@ bool IS25LP256_eraseAll(bool flgwait) {
 
   // 처리 대기
   while(IS25LP256_IsBusy() & flgwait) {
-    delay(1000);        // 1sec마다 체크. 실제로 전체 지우는데 1~3분 걸리므로 한참 돌 것이다.
+    sleep(1);        // 1sec마다 체크. 실제로 전체 지우는데 1~3분 걸리므로 한참 돌 것이다.
   }
   return true;
 }
