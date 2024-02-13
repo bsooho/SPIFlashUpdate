@@ -158,11 +158,8 @@ int main() {
         return 1;
     }
 
-    // Read file content into the allocated memory
-    fread(fileContent, 1, fileSize, binaryFile);
-
-    // Close the file
-    fclose(binaryFile);
+    // Free allocated memory
+    free(fileContent);
 
   
     wait_for_space(); // Program waits here for space bar press
@@ -344,11 +341,6 @@ int main() {
 
 
 */
-
-  
-    // Free allocated memory
-    free(fileContent);
-
   
     // 상태 레지스터 가져오기
     // Get fron Status Register1
