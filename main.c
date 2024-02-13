@@ -250,10 +250,15 @@ int main() {
 
 
 
-    // Erase All. It takes 1~3 min.
-    n = IS25LP256_eraseAll(true);
-    printf("Erase All: n=%d\n",n);
+//  Erase All. It takes 1~3 min.
+//  n = IS25LP256_eraseAll(true);
+//  printf("Erase All: n=%d\n",n);
 
+//  Erase first 1 block 64KB.
+    n = IS25LP256_erase64Block(0, true);
+    printf("Erase Block 0 in 64kB: n=%d\n",n);
+
+  
     // Check if erase is done
     memset(buf,0,256);  // 임시 버퍼 클리어
     n =  IS25LP256_read (0, buf, 256);
@@ -279,7 +284,7 @@ int main() {
       while (int_addr < 0x1000){
     printf("Check point!!!\n\n");
 
-        for (uint8_t j=0; j<256; j++) {
+        for (int j=0; j<256; j++) {
           buf[j] = sector_buf[int_addr+j];
         }
     printf("Check point!!!\n\n");
