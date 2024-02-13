@@ -320,16 +320,11 @@ int main() {
     // write BIN file in SPI Flash memory
     ssize_t read_bytes;
     uint32_t flash_address = 0x0; // Start address in SPI Flash where data will be written
-    int int_addr;  //internal address in 1 sector (4096bytes)
-
-
+    int int_addr=0;  //internal address in 1 sector (4096bytes)
   
-      while ((read_bytes = fread(buf, 1, CHUNK_SIZE, binaryFile)) > 0) {
-  
-      int_addr = 0;
+    while ((read_bytes = fread(buf, 1, CHUNK_SIZE, binaryFile)) > 0) {
       
-      while (int_addr < 16){
-      
+      while (int_addr < 16){      
         n = IS25LP256_pageWrite(flash_address>>12, int_addr, buf, CHUNK_SIZE);
         printf("flash address=%08x   read bytes = %d   write bytes = %d\n",flash_address, read_bytes, n-4);
 
@@ -341,7 +336,7 @@ int main() {
         printf("flash address=%08x\n",flash_address);
         printf("internal address=%08x\n\n",int_addr);
 
-        int_addr++;
+        int_addr = int_addr + 0x100;
       }
       return 0;
     }
