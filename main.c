@@ -274,9 +274,6 @@ int main() {
     n =  IS25LP256_read(s_addr, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
-
-
-  return 0;
   
   /*
     // Erase data by Sector from start address
@@ -304,6 +301,12 @@ int main() {
     printf("Erase all is done!!!\n");
     wait_for_space(); // Program waits here for space bar press
 
+    // Read current stored data
+    // 256 byte from address s_addr
+    memset(buf,0,256);  // 임시 버퍼 클리어
+    n =  IS25LP256_read(s_addr, buf, 256);
+    printf("Read Data: n=%d\n",n);
+    dump(buf,256);
 
 
     // write BIN file in SPI Flash memory
@@ -314,6 +317,12 @@ int main() {
       flash_address += read_bytes;
     }
 
+    // Read current stored data
+    // 256 byte from address s_addr
+    memset(buf,0,256);  // 임시 버퍼 클리어
+    n =  IS25LP256_read(s_addr, buf, 256);
+    printf("Read Data: n=%d\n",n);
+    dump(buf,256);
   
     printf("Write is done!!!\nPress the space bar...\n");
     wait_for_space(); // Program waits here for space bar press
