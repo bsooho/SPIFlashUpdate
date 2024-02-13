@@ -277,6 +277,10 @@ int main() {
   
     while ((read_bytes = fread(sector_buf, 1, SECTOR_SIZE, binaryFile)) > 0) {
       int_addr=0;  //initialize int_addr
+
+      for (int j = 0; j < CHUNK_SIZE; j++) {
+        buf[j] = sector_buf[int_addr+j];
+      }
       dump(buf,256);
       
       while (int_addr < SECTOR_SIZE){
