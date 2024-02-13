@@ -36,6 +36,7 @@
 #define SPI_DEVICE "/dev/spidev0.0"  // SPI channel 0
 #define SPI_SPEED_HZ 2000000	// SPI clock speed at 2MHz
 #define CHUNK_SIZE 256			// unit amount per write operation
+#define SECTOR_SIZE 4096    // unit amount of one sector
 
 //
 // Dump and show data (256 byte, similar with HEX editor mode)
@@ -120,7 +121,7 @@ int main() {
   
     uint8_t jedc[3];      // JEDEC-ID (3byte, MF7-MF0 ID15-ID8 ID7-ID0)
     uint8_t buf[CHUNK_SIZE];     // acquired data, 256byte
-    uint16_t sector_buf[4096];    // acquired data for every sector, 4096byte
+    uint32_t sector_buf[SECTOR_SIZE];    // acquired data for every sector, 4096byte
     uint8_t wdata[CHUNK_SIZE];   // data to be written, 256byte (Maximum 256byte by Input Page Write command)
     uint8_t i;            // general variable
     uint16_t n;           // return value or number of data read
@@ -272,14 +273,15 @@ int main() {
     // write BIN file in SPI Flash memory
     ssize_t read_bytes;
     uint32_t flash_address = 0x0; // Start address in SPI Flash where data will be written
-    uint16_t int_addr;  //internal address in 1 sector (4096bytes)
+    uint16_t int_addr;  //internal address within a sector (total 4096byte)
   
-    while ((read_bytes = fread(sector_buf, 1, 4096, binaryFile)) > 0) {
+    while ((read_bytes = fread(sector_buf, 1, SECTOR_SIZE, binaryFile)) > 0) {
       int_addr=0;  //initialize int_addr
+      dump(buf,256);
       
-      while (int_addr < 0x1000){
+      while (int_addr < SECTOR_SIZE){
  
-        for (int j=0; j<256; j++) {
+        for (int j = 0; j < CHUNK_SIZE; j++) {
           buf[j] = sector_buf[int_addr+j];
         }
    
@@ -290,10 +292,10 @@ int main() {
         n =  IS25LP256_read(flash_address+int_addr, buf, 256);
         dump(buf,256);
 
-        int_addr += 0x100;
+        int_addr += CHUNK_SIZE;
       }
 
-      flash_address += 0x1000;
+      flash_address += read_bytes;
 
       return 0;
     }
