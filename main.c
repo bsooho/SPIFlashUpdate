@@ -15,6 +15,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
+#include <linux/spi/spidev.h>
 #include <gpiod.h>        // GPIO control using GPIOD Library
 #include <wiringPiSPI.h>  // SPI control using WiringPi Library
 #include "IS25LP256.h"
