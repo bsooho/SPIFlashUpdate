@@ -17,6 +17,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
+#include <termios.h>
 #include <sys/ioctl.h>
 #include <linux/spi/spidev.h>
 #include <gpiod.h>        // GPIO control using GPIOD Library
@@ -80,6 +81,37 @@ void dump(uint8_t *dt, uint32_t n) {
   }
   printf("|%02x \n\n",total);
 }
+
+//
+// Pause and wait for space bar
+//
+void wait_for_space() {
+    struct termios oldt, newt;
+    int ch;
+
+    // Get the current terminal settings
+    tcgetattr(STDIN_FILENO, &oldt);
+
+    // Copy settings to newt and modify them
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO); // Disable canonical mode and echo
+
+    // Apply the new settings to the terminal
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+    // Wait for the space bar
+    printf("Press the space bar to continue...\n");
+    do {
+        ch = getchar();
+    } while (ch != ' ');
+
+    // Restore the original terminal settings
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+}
+
+
+
+
 
 int main() {
     struct gpiod_chip *chip;
