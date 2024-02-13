@@ -276,7 +276,9 @@ int main() {
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
-    // 섹터 단위 삭제, 256byte 단위로 테스트하므로 4kB 즉 4096byte만 지워도 됨
+
+  /*
+    // 섹터 단위 삭제, 256byte 단위로 테스트하므로 1개 sector인 4kB, 즉 4096byte만 지워도 됨
     // 입력할 주소는 Sector No.이므로, 주소를 12bit 오른으로 밀어야 함.
     // Erase data by Sector
     n = IS25LP256_eraseSector(s_sect_no,true);
@@ -284,7 +286,20 @@ int main() {
     memset(buf,0,256);  // 임시 버퍼 클리어
     n =  IS25LP256_read (s_addr, buf, 256);
     dump(buf,256);
- 
+*/
+
+
+    // 전체 삭제
+    // Erase All
+    n = IS25LP256_eraseSector(s_sect_no,true);
+    printf("Erase Sector(%04x): n=%d\n",s_sect_no,n);
+    memset(buf,0,256);  // 임시 버퍼 클리어
+    n =  IS25LP256_read (s_addr, buf, 256);
+    dump(buf,256);
+
+
+  
+  
     // 데이터 쓰기 테스트 START_ADDR+10부터 A~Z 쓰기
     for (i=0; i < 26; i++) {
       wdata[i]='A'+i; // 쓸 데이터 생성, A-Z, 총 26개
