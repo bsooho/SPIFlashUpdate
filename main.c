@@ -298,12 +298,8 @@ int main() {
       int_addr += CHUNK_SIZE;
 
       flash_address += read_bytes;
-      
-      if (k++ > 0){
-        return 0;
-      }
-    }
 
+    }
 
     printf("Write is done!!!\n\n");
     wait_for_space(); // Program waits here for space bar press
@@ -312,12 +308,12 @@ int main() {
     // Read current stored data
     // 256 byte from address s_addr
     memset(buf,0,256);  // 임시 버퍼 클리어
-    n =  IS25LP256_read(s_addr, buf, 256);
+    n =  IS25LP256_read(0, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
     memset(buf,0,256);  // 임시 버퍼 클리어
-    n =  IS25LP256_read(s_addr+256, buf, 256);
+    n =  IS25LP256_read(256, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
   
