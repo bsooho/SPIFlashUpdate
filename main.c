@@ -20,7 +20,7 @@
 #include <sys/ioctl.h>
 #include <linux/spi/spidev.h>
 #include <gpiod.h>        // GPIO control using GPIOD Library
-//#include <wiringPiSPI.h>  // SPI control using WiringPi Library
+#include <wiringPiSPI.h>  // SPI control using WiringPi Library
 #include "IS25LP256.h"
 
 #define SPI_CHANNEL 0   // /dev/spidev0.0 사용
