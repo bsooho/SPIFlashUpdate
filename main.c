@@ -29,7 +29,7 @@
 #define GPIO_CHIP "gpiochip0"
 #define GPIO_PIN 14
 
-#define FILENAME "FLASH_EN.BIN"		// File name to be written to SPI Flash memory
+#define FILENAME "FLASH_EN.bin"		// File name to be written to SPI Flash memory
 #define SPI_DEVICE "/dev/spidev0.0"
 #define SPI_SPEED_HZ 2000000	// SPI clock speed at 2MHz
 #define CHUNK_SIZE 256			// unit amount per write operation
