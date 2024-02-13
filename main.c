@@ -288,25 +288,22 @@ int main() {
     // 전체 삭제
     // Erase All. It takes 1~3 min.
     n = IS25LP256_eraseAll(true);
-  
     printf("Erase All: n=%d\n",n);
+ 
     memset(buf,0,256);  // 임시 버퍼 클리어
     n =  IS25LP256_read (0, buf, 256);
     dump(buf,256);
 
     memset(buf,0,256);  // 임시 버퍼 클리어
     n =  IS25LP256_read(256, buf, 256);
-    printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
     memset(buf,0,256);  // 임시 버퍼 클리어
     n =  IS25LP256_read(512, buf, 256);
-    printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
     memset(buf,0,256);  // 임시 버퍼 클리어
     n =  IS25LP256_read(768, buf, 256);
-    printf("Read Data: n=%d\n",n);
     dump(buf,256);
   
     printf("Erase all is done!!!\n\n");
@@ -317,20 +314,29 @@ int main() {
     // write BIN file in SPI Flash memory
     ssize_t read_bytes;
     uint32_t flash_address = 0x0; // Start address in SPI Flash where data will be written
+    uint8_5 int_addr;  //internal address in 1 sector (4096bytes)
     while ((read_bytes = fread(buf, 1, CHUNK_SIZE, binaryFile)) > 0) {
       dump(buf,256);
+      
+      int_addr = 0;
+      
+      while (int_addr < 16){
+      
+        n = IS25LP256_pageWrite(flash_address>>12, int_addr, buf, CHUNK_SIZE);
+        printf("flash address=%08x   read bytes = %d   write bytes = %d\n",flash_address, read_bytes, n-4);
 
-      n = IS25LP256_pageWrite(flash_address>>12, 0, buf, CHUNK_SIZE);
-      printf("flash address=%08x   read bytes = %d    write bytes = %d\n",flash_address, read_bytes, n-4);
+        memset(buf,0,256);  // 임시 버퍼 클리어
+        n =  IS25LP256_read(int_addr, buf, 256);
+        dump(buf,256);
 
-      memset(buf,0,256);  // 임시 버퍼 클리어
-      n =  IS25LP256_read(0, buf, 256);
-      printf("Read Data: n=%d\n",n);
-      dump(buf,256);
+        flash_address += read_bytes;
+        printf("flash address=%08x\n",flash_address);
+        printf("internal address=%08x\n\n",int_addr);
 
-      flash_address += read_bytes;
-      printf("flash address=%08x\n",flash_address);
-      return 0;
+        int_addr++;
+      }
+
+      dump(
     }
 
 
