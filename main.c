@@ -123,9 +123,6 @@ int main() {
     uint8_t wdata[CHUNK_SIZE];   // data to be written, 256byte (Maximum 256byte by Input Page Write command)
     uint8_t i;            // general variable
     uint16_t n;           // return value or number of data read
-
-  //  int spi_fd;
-    int file_fd;
   
     ssize_t bytes_read;
   
@@ -168,44 +165,7 @@ int main() {
 
   
     wait_for_space(); // Program waits here for space bar press
-
   
-/*
-    // Open binary file
-    file_fd = open(FILENAME, O_RDONLY);
-    if (file_fd < 0) {
-        perror("Error opening binary file");
-        close(spi_fd);
-        return 1;
-    }
-*/
-  
-  /* Below is not required since WiringPiSPI library is used in this code.
-  
-    // Open SPI device
-    spi_fd = open(SPI_DEVICE, O_RDWR);
-    if (spi_fd < 0) {
-        perror("Error opening SPI device");
-        return 1;
-    }
-  
-    // Configure SPI settings (you may need to adjust according to your Flash memory specifications)
-    uint8_t mode = SPI_MODE_0;
-    if (ioctl(spi_fd, SPI_IOC_WR_MODE, &mode) < 0) {
-        perror("Error setting SPI mode");
-        close(spi_fd);
-        close(file_fd);
-        return 1;
-    }
-  
-    uint32_t speed = SPI_SPEED_HZ;
-    if (ioctl(spi_fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed) < 0) {
-        perror("Error setting SPI speed");
-        close(spi_fd);
-        close(file_fd);
-        return 1;
-    }
-*/
 
     // Open GPIO chip
     chip = gpiod_chip_open_by_name(GPIO_CHIP);
