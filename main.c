@@ -275,6 +275,7 @@ int main() {
     uint32_t flash_address = 0; // Start address in SPI Flash where data will be written
     uint32_t sector_no = 0;
     uint int_addr=0;  //internal address within a sector (total 4096byte)
+    int k=0;
   
 //   while ((read_bytes = fread(sector_buf, 1, SECTOR_SIZE, binaryFile)) > 0) {
     while ((read_bytes = fread(buf, 1, CHUNK_SIZE, binaryFile)) > 0) {
@@ -296,7 +297,11 @@ int main() {
 
       flash_address += read_bytes;
 
-      return 0;
+      k++;
+
+      if (k>3){
+        return 0;
+      }
     }
 
 
