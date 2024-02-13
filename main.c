@@ -286,7 +286,7 @@ int main() {
     while ((read_bytes = fread(sector_buf, 1, 4096, binaryFile)) > 0) {
       int_addr=0;  //initialize int_addr
       
-      while (int_addr < 0x1000){      
+//      while (int_addr < 0x1000){      
         n = IS25LP256_pageWrite(flash_address>>12, int_addr, buf, CHUNK_SIZE);
         printf("flash address=%08x   read bytes = %d   write bytes = %d\n",flash_address, read_bytes, n-4);
 
@@ -299,7 +299,7 @@ int main() {
         printf("internal address=%08x\n\n",int_addr);
 
         int_addr = int_addr + 0x100;
-      }
+//      }
       return 0;
     }
 
