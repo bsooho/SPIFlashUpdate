@@ -137,7 +137,6 @@ int main() {
 
     uint32_t s_addr=start_addr;         // assign start address at 32bit variable
 
-    size_t fileSize;
 
     // Open binary file for reading
     FILE* binaryFile = fopen(FILENAME, "rb");
@@ -147,6 +146,7 @@ int main() {
     }
 
     // Get the file size
+    size_t fileSize;
     fseek(binaryFile, 0, SEEK_END);
     fileSize = ftell(binaryFile);
     printf ("File size: %d\n",fileSize);
@@ -160,7 +160,7 @@ int main() {
         return 1;
     }
 
-    printf("Wait for space bar...\n\n");
+  
     wait_for_space(); // Program waits here for space bar press
 
   
@@ -242,11 +242,7 @@ int main() {
     }
 
 
-  
-    printf("Wait for space bar...\n\n");
     wait_for_space(); // Program waits here for space bar press
-
-
 
   
     // Begin of flash memory
@@ -286,7 +282,7 @@ int main() {
 
     printf("We will start to erase all...\n");
     wait_for_space(); // Program waits here for space bar press
-    printf("Erase all is started...\n");
+    printf("Erase all is started...\n\n");
 
 
     // 전체 삭제
@@ -298,9 +294,10 @@ int main() {
     dump(buf,256);
 
   
-    printf("Erase all is done!!!\n");
+    printf("Erase all is done!!!\n\n");
     wait_for_space(); // Program waits here for space bar press
 
+  
     // Read current stored data
     // 256 byte from address s_addr
     memset(buf,0,256);  // 임시 버퍼 클리어
