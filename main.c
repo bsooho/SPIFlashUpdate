@@ -162,6 +162,11 @@ int main() {
         fclose(binaryFile);
         return 1;
     }
+
+
+    wait_for_space(); // Program waits here for space bar press
+    printf("Continuing execution...\n\n");
+
   
 /*
     // Open binary file
@@ -240,6 +245,10 @@ int main() {
       return 1;
     }
 
+
+  
+    wait_for_space(); // Program waits here for space bar press
+    printf("Continuing execution...\n\n");
 
 
 
