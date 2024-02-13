@@ -287,7 +287,7 @@ int main() {
 
       wait_for_space(); // Program waits here for space bar press
       
-//      while (int_addr < 0x1000){      
+        while (int_addr < 0x1000){      
         n = IS25LP256_pageWrite(flash_address>>12, int_addr, buf, CHUNK_SIZE);
         printf("flash address=%08x   read bytes = %d   write bytes = %d\n",flash_address, read_bytes, n-4);
 
@@ -300,7 +300,7 @@ int main() {
         printf("internal address=%08x\n\n",int_addr);
 
         int_addr += 0x100;
-//      }
+        }
       return 0;
     }
 
