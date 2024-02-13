@@ -8,7 +8,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <wiringPi.h>
+#include <wiringPi.h>
 #include <wiringPiSPI.h>
 
 #include "IS25LP256.h"
