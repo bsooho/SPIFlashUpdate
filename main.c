@@ -299,7 +299,7 @@ int main() {
 
       flash_address += read_bytes;
       
-      if (k++>3){
+      if (k++>1){
         return 0;
       }
     }
