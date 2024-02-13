@@ -285,8 +285,9 @@ int main() {
     dump(buf,256);
 */
 
-    printf("We start to erase all...\nPress space bar...\n");
+    printf("We will start to erase all...\nPress the space bar...\n");
     wait_for_space(); // Program waits here for space bar press
+    printf("Erase all is started...\n");
 
 
     // 전체 삭제
@@ -298,12 +299,27 @@ int main() {
     dump(buf,256);
 
   
-    printf("Erase all is done!!!\nPress space bar...\n");
+    printf("Erase all is done!!!\nPress the space bar...\n");
+    wait_for_space(); // Program waits here for space bar press
+
+
+
+    // write BIN file in SPI Flash memory
+    size_t read_bytes;
+    uint32_t flash_address = 0; // Start address in SPI Flash where data will be written
+    while ((read_bytes = fread(buf, 1, CHUNK_SIZE, file)) > 0) {
+      n = IS25LP256_pageWrite(flash_addres, 0, buf, CHUNK_SIZE);
+      flash_address += read_bytes;
+    }
+
+  
+    printf("Write is done!!!\nPress the space bar...\n");
     wait_for_space(); // Program waits here for space bar press
 
   
-  
-    // 데이터 쓰기 테스트 START_ADDR+10부터 A~Z 쓰기
+
+  /*
+  // 데이터 쓰기 테스트 START_ADDR+10부터 A~Z 쓰기
     for (i=0; i < 26; i++) {
       wdata[i]='A'+i; // 쓸 데이터 생성, A-Z, 총 26개
     }
@@ -331,14 +347,17 @@ int main() {
     n =  IS25LP256_fastread(s_addr,buf, 256);
     printf("Fast Read Data: n=%d\n",n);
     dump(buf,256);
+*/
 
+
+  
     // 상태 레지스터 가져오기
     // Get fron Status Register1
     buf[0] = IS25LP256_readStatusReg();
     printf("Status Register: %x\n",buf[0]);
 
     // Disable SPI0 Bypass lines
-    gpiod_line_set_value(line, 0); // Set line low (V)
+    gpiod_line_set_value(line, 0); // Set FLASH_EN (GPIO 14) line low (0V)
     printf("SPI Bypass Disabled!\n\n");
   
     return 0;
