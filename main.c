@@ -265,7 +265,7 @@ int main() {
 
 
     // write BIN file in SPI Flash memory
-    size_t read_bytes;
+    ssize_t read_bytes;
     uint32_t flash_address = 0x0; // Start address in SPI Flash where data will be written
     uint16_t int_addr;  //internal address in 1 sector (4096bytes)
 
