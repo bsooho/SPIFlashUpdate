@@ -101,6 +101,12 @@ int main() {
     uint16_t s_sect_no=start_addr>>12;  // start sector number for Input Page Write
     uint32_t s_addr=start_addr;         // assign start address at 32bit variable
 
+    // Open SPI device
+    spi_fd = open(SPI_DEVICE, O_RDWR);
+    if (spi_fd < 0) {
+        perror("Error opening SPI device");
+        return 1;
+    }
   
     // Open binary file
     file_fd = open(FILENAME, O_RDONLY);
@@ -110,8 +116,27 @@ int main() {
         return 1;
     }
 
+    // Configure SPI settings (you may need to adjust according to your Flash memory specifications)
+    uint8_t mode = SPI_MODE_0;
+    if (ioctl(spi_fd, SPI_IOC_WR_MODE, &mode) < 0) {
+        perror("Error setting SPI mode");
+        close(spi_fd);
+        close(file_fd);
+        return 1;
+    }
+  
+    uint32_t speed = SPI_SPEED_HZ;
+    if (ioctl(spi_fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed) < 0) {
+        perror("Error setting SPI speed");
+        close(spi_fd);
+        close(file_fd);
+        return 1;
+    }
+
     return 0;
 
+
+  
   
     // Open GPIO chip
     chip = gpiod_chip_open_by_name(GPIO_CHIP);
