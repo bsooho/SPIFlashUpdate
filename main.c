@@ -160,9 +160,8 @@ int main() {
         return 1;
     }
 
-
+    printf("Wait for space bar...\n\n");
     wait_for_space(); // Program waits here for space bar press
-    printf("Continuing execution...\n\n");
 
   
 /*
@@ -244,8 +243,8 @@ int main() {
 
 
   
+    printf("Wait for space bar...\n\n");
     wait_for_space(); // Program waits here for space bar press
-    printf("Continuing execution...\n\n");
 
 
 
@@ -278,9 +277,7 @@ int main() {
 
 
   /*
-    // 섹터 단위 삭제, 256byte 단위로 테스트하므로 1개 sector인 4kB, 즉 4096byte만 지워도 됨
-    // 입력할 주소는 Sector No.이므로, 주소를 12bit 오른으로 밀어야 함.
-    // Erase data by Sector
+    // Erase data by Sector from start address
     n = IS25LP256_eraseSector(s_sect_no,true);
     printf("Erase Sector(%04x): n=%d\n",s_sect_no,n);
     memset(buf,0,256);  // 임시 버퍼 클리어
@@ -288,15 +285,21 @@ int main() {
     dump(buf,256);
 */
 
+    printf("We start to erase all...\nPress space bar...\n");
+    wait_for_space(); // Program waits here for space bar press
+
 
     // 전체 삭제
-    // Erase All
-    n = IS25LP256_eraseSector(s_sect_no,true);
-    printf("Erase Sector(%04x): n=%d\n",s_sect_no,n);
+    // Erase All. It takes 1~3 min.
+    n = IS25LP256_eraseAll(true);
+    printf("Erase All: n=%d\n",n);
     memset(buf,0,256);  // 임시 버퍼 클리어
     n =  IS25LP256_read (s_addr, buf, 256);
     dump(buf,256);
 
+  
+    printf("Erase all is done!!!\nPress space bar...\n");
+    wait_for_space(); // Program waits here for space bar press
 
   
   
