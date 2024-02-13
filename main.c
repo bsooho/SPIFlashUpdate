@@ -277,8 +277,8 @@ int main() {
 
   
   read_bytes = fread(sector_buf, 1, SECTOR_SIZE, binaryFile);
-  for (int j = 0; j < CHUNK_SIZE; j++) {
-    buf[j] = sector_buf[int_addr+j];
+  for (uint16_t k = 0; k < CHUNK_SIZE; k++) {
+    buf[k] = sector_buf[int_addr+k];
   }
   dump(buf,256);
   return 0;
