@@ -310,13 +310,13 @@ int main() {
     ssize_t read_bytes;
     uint32_t flash_address = 0; // Start address in SPI Flash where data will be written
     while ((read_bytes = fread(buf, 1, CHUNK_SIZE, binaryFile)) > 0) {
-      n = IS25LP256_pageWrite(flash_address, 0, buf, CHUNK_SIZE);
+      n = IS25LP256_pageWrite(flash_address>>12, 0, buf, CHUNK_SIZE);
       printf("flash address=%08x    read bytes = %d    write bytes = %d\n",flash_address, read_bytes, n);
       flash_address += read_bytes;
     }
 
 
-    printf("Write is done!!!\nPress the space bar...\n");
+    printf("Write is done!!!\n\n");
     wait_for_space(); // Program waits here for space bar press
  
   
@@ -339,7 +339,7 @@ int main() {
       wdata[i]='A'+i; // 쓸 데이터 생성, A-Z, 총 26개
     }
     n =  IS25LP256_pageWrite(s_sect_no, 10, wdata, 26);
-    printf("page_write(%08x,10,d,26): n=%d\n",s_addr,n);
+    printf("page_write(%08x,10,%d,26): n=%d\n",s_addr,n);
 
     // 데이터 읽기 (주소 0부터 256바이트 데이터 가져오기)
     // Read 256 byte data from Address=0
@@ -354,7 +354,7 @@ int main() {
       wdata[i]='0'+i; // 0-9     
     }  
     n =  IS25LP256_pageWrite(s_sect_no, 0, wdata, 10);
-    printf("page_write(%08x,0,d,10): n=%d\n",s_addr,n);
+    printf("page_write(%08x,0,%d,10): n=%d\n",s_addr,n);
 
     // 고속 데이터 읽기(주소 0에서 256바이트 가져 오기)
     // First read 256 byte data from Address=0
