@@ -298,10 +298,8 @@ int main() {
       int_addr += CHUNK_SIZE;
 
       flash_address += read_bytes;
-
-      k++;
-
-      if (k>1){
+      
+      if (k++>3){
         return 0;
       }
     }
