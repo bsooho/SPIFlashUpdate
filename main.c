@@ -292,7 +292,7 @@ int main() {
       printf("sector no=%08x  int_addr = %d\nread bytes = %d   write bytes = %d\n", sector_no, int_addr, read_bytes, n-4);
 
       memset(buf,0,256);  // 임시 버퍼 클리어
-      n =  IS25LP256_read(flash_address+int_addr, buf, 256);
+      n =  IS25LP256_read(sector_no<<12 + int_addr, buf, 256);
       dump(buf,256);
 
       int_addr += CHUNK_SIZE;
