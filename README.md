@@ -1,16 +1,17 @@
-# Raspberry PI 4 Model B - Flash IS25LP256 through Artix7
+# Raspberry PI CM4 - Write FPGA ROM file to Flash memeory of IS25LP256 through Artix7
 
-Access and write SPI Flash Memory IS25LP256 for Artix7 from RaspberryPi 4B
+Access and write SPI Flash Memory IS25LP256 for Artix7 from RaspberryPi 4B and/or CM4
 
-I ported from here.
-
+Based on the below code.
 https://github.com/nopnop2002/Raspberry-W25Q64.git
 ---
 
 # Software requirement
 - WiringPi Library
+- gpiod Library
 
  This project uses the wiringPiSPISetup() function to initialize SPI, and use /dev/spidev0.0.
+ GPIO is handeled by gpiod
 
 ---
 
