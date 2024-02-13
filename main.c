@@ -131,7 +131,7 @@ int main() {
     printf("Setup SPI0 channel\n");
   
     // Start SPI channel 0 with 2MHz speed
-    if (wiringPiSPISetup(SPI_CHANNEL, 2000000) < 0) {
+    if (wiringPiSPISetup(SPI_CHANNEL, SPI_SPEED_HZ) < 0) {
       printf("SPISetup failed:\n");
       return 1;
     }
