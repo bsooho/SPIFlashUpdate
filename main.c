@@ -307,7 +307,7 @@ int main() {
     // write BIN file in SPI Flash memory
     size_t read_bytes;
     uint32_t flash_address = 0; // Start address in SPI Flash where data will be written
-    while ((read_bytes = fread(buf, 1, CHUNK_SIZE, file)) > 0) {
+    while ((read_bytes = fread(buf, 1, CHUNK_SIZE, binaryFile)) > 0) {
       n = IS25LP256_pageWrite(flash_addres, 0, buf, CHUNK_SIZE);
       flash_address += read_bytes;
     }
