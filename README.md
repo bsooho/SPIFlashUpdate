@@ -27,9 +27,10 @@ https://github.com/nopnop2002/Raspberry-W25Q64.git
 
 # Build
 ```
-git clone https://github.com/bsooho/A7FlashWrite
-cd A7FlashWrite
+git clone https://github.com/bsooho/SPIFlashUpdate
+cd SPIFlashUpdate
 sudo make
+sudo ./main
 ```
 
 ---
