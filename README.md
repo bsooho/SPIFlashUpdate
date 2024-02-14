@@ -19,6 +19,7 @@ Updated ROM will be effected on next power on.
   ```
 
  This project uses the wiringPiSPISetup() function to initialize SPI, and use /dev/spidev0.0.
+ 
  GPIO is handeled by gpiod
 
 ---
