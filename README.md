@@ -1,6 +1,6 @@
 # Update Flash memory of FPGA by Raspberry PI CM4
 
-Access, erase and write ROM file for flash Memory IS25LP256 from RaspberryPi CM4
+Access, erase and write ROM file for flash Memory IS25LP256 from RaspberryPi CM4.
 Updated ROM will be effected on next power on.
 ---
 
@@ -19,7 +19,6 @@ Updated ROM will be effected on next power on.
   ```
 
  This project uses the wiringPiSPISetup() function to initialize SPI, and use /dev/spidev0.0.
- 
  GPIO is handeled by gpiod
 
 ---
