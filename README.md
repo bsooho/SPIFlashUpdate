@@ -25,7 +25,7 @@ https://github.com/nopnop2002/Raspberry-W25Q64.git
 
 ---
 
-# Build
+# Build & Run
 ```
 git clone https://github.com/bsooho/SPIFlashUpdate
 cd SPIFlashUpdate
