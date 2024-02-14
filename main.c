@@ -29,9 +29,9 @@
 #define GPIO_CHIP "gpiochip0"
 #define GPIO_PIN 14
 
-//#define FILENAME "./FLASH_EN.bin"		// File name to be written to SPI Flash memory
+#define FILENAME "./FLASH_EN.bin"		// File name to be written to SPI Flash memory
 //#define FILENAME "./LED_Blink_Fast.bin"		// File name to be written to SPI Flash memory
-#define FILENAME "./LED_Blink_Slow.bin"		// File name to be written to SPI Flash memory
+//#define FILENAME "./LED_Blink_Slow.bin"		// File name to be written to SPI Flash memory
 
 #define SPI_MODE  0          // SPI mode among 0, 1, 2 or 3
 #define SPI_DEVICE "/dev/spidev0.0"  // SPI channel 0
@@ -269,7 +269,7 @@ int main() {
       
       n = IS25LP256_pageWrite(sector_no, int_addr, buf, CHUNK_SIZE);
 
-      if (sector_no%0x80==0){
+      if (flash_address%0x10000==0){
         printf("sector no=%08x  int_addr = %08x read bytes = %d  write bytes = %d\n", sector_no, int_addr, read_bytes, n-4);
       }
 //      memset(buf,0,256);  // 임시 버퍼 클리어
