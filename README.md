@@ -14,6 +14,11 @@ https://github.com/nopnop2002/Raspberry-W25Q64.git
   ./build
   ```
 - libgpiod Library
+  ```
+  sudo apt-get install libgpiod2
+  sudo apt-get install libgpiod-dev
+  dpkg -l libgpiod2
+  ```
 
  This project uses the wiringPiSPISetup() function to initialize SPI, and use /dev/spidev0.0.
  GPIO is handeled by gpiod
