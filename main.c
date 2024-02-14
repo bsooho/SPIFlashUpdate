@@ -29,8 +29,8 @@
 #define GPIO_CHIP "gpiochip0"
 #define GPIO_PIN 14
 
-//#define FILENAME "./FLASH_EN.bin"		// File name to be written to SPI Flash memory
-#define FILENAME "./LED_Blink_Fast.bin"		// File name to be written to SPI Flash memory
+#define FILENAME "./FLASH_EN.bin"		// File name to be written to SPI Flash memory
+//#define FILENAME "./LED_Blink_Fast.bin"		// File name to be written to SPI Flash memory
 //#define FILENAME "./LED_Blink_Slow.bin"		// File name to be written to SPI Flash memory
 
 #define SPI_MODE  0          // SPI mode among 0, 1, 2 or 3
