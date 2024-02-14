@@ -34,7 +34,7 @@
 
 #define SPI_MODE  0          // SPI mode among 0, 1, 2 or 3
 #define SPI_DEVICE "/dev/spidev0.0"  // SPI channel 0
-#define SPI_SPEED_HZ 10000000	// SPI clock speed at 10MHz
+#define SPI_SPEED_HZ 5000000	// SPI clock speed at 5MHz
 #define CHUNK_SIZE 256			// unit amount per write operation
 #define SECTOR_SIZE 4096    // unit amount of one sector
 
@@ -192,7 +192,7 @@ int main() {
     printf("SPI Bypass Enabled!\n\n");
     printf("Setup SPI0 channel\n\n");
   
-    // Start SPI channel 0 with 10MHz speed
+    // Start SPI channel 0 with pre-defined speed
     if (wiringPiSPISetupMode(SPI_CHANNEL, SPI_SPEED_HZ, SPI_MODE) < 0) {
       printf("SPISetup failed:\n");
       return 1;
