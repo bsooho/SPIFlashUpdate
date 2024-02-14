@@ -206,7 +206,7 @@ int main() {
     IS25LP256_readManufacturer(jedc);
     printf("\nJEDEC ID : ");
     for (i=0; i< 3; i++) {
-      printf("%2X ",jedc[i]);
+      printf("2X ",jedc[i]);
     }
     printf("\n");
     
