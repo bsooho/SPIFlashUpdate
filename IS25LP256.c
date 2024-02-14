@@ -9,9 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-//#include <wiringPi.h>
 #include <wiringPiSPI.h>
-
 #include "IS25LP256.h"
 
 #define CMD_NORD              0x03    // Normal Read Mode
