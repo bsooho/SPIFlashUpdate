@@ -236,15 +236,9 @@ int main() {
 
     // Erase first 4MB using Block(64kB) earase for 4 times.
     for (ii=0; ii<4; ii++){
-      n = IS25LP256_erase64Block(ii*0x10000, true)
+      n = IS25LP256_erase64Block(ii*0x10000, true);
     }
 
-  
-/*
-    Erase first 1 block 64KB.
-    n = IS25LP256_erase64Block(0, true);
-    printf("Erase Block 0 in 64kB: n=%d\n",n);
-*/
   
     // Check if erase is done
     memset(buf,0,256);  // 임시 버퍼 클리어
