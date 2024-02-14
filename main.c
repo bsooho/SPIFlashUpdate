@@ -20,24 +20,23 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 #include <linux/spi/spidev.h>
-#include <gpiod.h>        // GPIO control using GPIOD Library
+#include <gpiod.h>        // GPIO control using libgpiod Library
 #include <wiringPiSPI.h>  // SPI control using WiringPi Library
-#include "IS25LP256.h"
+#include "IS25LP256.h"    // Custom made library for SPI Flash operation through SPI0 channel
 
-#define SPI_CHANNEL 0   // /dev/spidev0.0 사용
-//#define SPI_CHANNEL 1 // /dev/spidev0.1 사용
+#define SPI_CHANNEL 0   // /dev/spidev0.0
 
 #define GPIO_CHIP "gpiochip0"
 #define GPIO_PIN 14
 
 #define FILENAME "./FLASH_EN.bin"		// File name to be written to SPI Flash memory
-//#define FILENAME "./LED_Blink_Fast.bin"		// File name to be written to SPI Flash memory
 
 #define SPI_MODE  0          // SPI mode among 0, 1, 2 or 3
 #define SPI_DEVICE "/dev/spidev0.0"  // SPI channel 0
-#define SPI_SPEED_HZ 2000000	// SPI clock speed at 2MHz
+#define SPI_SPEED_HZ 10000000	// SPI clock speed at 10MHz
 #define CHUNK_SIZE 256			// unit amount per write operation
 #define SECTOR_SIZE 4096    // unit amount of one sector
+
 
 //
 // Dump and show data (256 byte, similar with HEX editor mode)
@@ -84,6 +83,7 @@ void dump(uint8_t *dt, uint32_t n) {
   printf("|%02x \n\n",total);
 }
 
+
 //
 // Pause and wait for space bar
 //
@@ -114,7 +114,12 @@ void wait_for_space() {
 
 
 
-
+//
+// Main program
+//    1. Read ROM binary file
+//    2. Read JEDEC ID of Flash memeory
+//    3. Pause and wait for space bar
+//
 int main() {
     struct gpiod_chip *chip;
     struct gpiod_line *line;
@@ -122,7 +127,6 @@ int main() {
   
     uint8_t jedc[3];      // JEDEC-ID (3byte, MF7-MF0 ID15-ID8 ID7-ID0)
     uint8_t buf[CHUNK_SIZE];     // acquired data, 256byte
-//    uint16_t sector_buf[SECTOR_SIZE];    // acquired data for every sector, 4096byte
     uint8_t wdata[CHUNK_SIZE];   // data to be written, 256byte (Maximum 256byte by Input Page Write command)
     uint8_t i;            // general variable
     uint16_t n;           // return value or number of data read
@@ -145,27 +149,12 @@ int main() {
         return 1;
     }
 
-    // Get the file size
+    // Get the file size (Check manually if file is open normally)
     size_t fileSize;
     fseek(binaryFile, 0, SEEK_END);
     fileSize = ftell(binaryFile);
     printf ("File size: %d\n",fileSize);
     fseek(binaryFile, 0, SEEK_SET);
-
-    // Allocate memory for the file content
-    uint8_t *fileContent = (uint8_t *)malloc(fileSize);
-    if (fileContent == NULL) {
-        perror("Memory allocation error");
-        fclose(binaryFile);
-        return 1;
-    }
-
-    // Free allocated memory
-    free(fileContent);
-
-  
-//    wait_for_space(); // Program waits here for space bar press
-  
 
     // Open GPIO chip
     chip = gpiod_chip_open_by_name(GPIO_CHIP);
@@ -174,7 +163,8 @@ int main() {
         return 1;
     }
 
-    // Get GPIO line
+    // Get GPIO line, In this case, GPIO 14 is assinged.
+    // GPIO_PIN must be the ROM ENABLE signal (Active high)
     line = gpiod_chip_get_line(chip, GPIO_PIN);
     if (!line) {
         perror("Failed to get GPIO line");
@@ -190,27 +180,24 @@ int main() {
         return 1;
     }
 
+    // Test of GPIO 14 (Low - Disable ROM Update)
     gpiod_line_set_value(line, 0); // Set line low (0V)
     printf("SPI Bypass Disabled!\n\n");
 
-    usleep(100000);  //sleep 0.1sec
+    usleep(10000);  //sleep 10msec
 
+    // Test of GPIO 14 (High - Enable ROM Update)
     gpiod_line_set_value(line, 1); // Set line high (3.3V)
     printf("SPI Bypass Enabled!\n\n");
-
-
-    printf("Setup SPI0 channel\n");
+    printf("Setup SPI0 channel\n\n");
   
-    // Start SPI channel 0 with 2MHz speed
+    // Start SPI channel 0 with 10MHz speed
     if (wiringPiSPISetupMode(SPI_CHANNEL, SPI_SPEED_HZ, SPI_MODE) < 0) {
       printf("SPISetup failed:\n");
       return 1;
     }
 
 
-//    wait_for_space(); // Program waits here for space bar press
-
-  
     // Begin of flash memory
     IS25LP256_begin(SPI_CHANNEL);
 
@@ -237,27 +224,16 @@ int main() {
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
   
-  /*
-    // Erase data by Sector from start address
-    n = IS25LP256_eraseSector(s_sect_no,true);
-    printf("Erase Sector(%04x): n=%d\n",s_sect_no,n);
-    memset(buf,0,256);  // 임시 버퍼 클리어
-    n =  IS25LP256_read (s_addr, buf, 256);
-    dump(buf,256);
-*/
-
     printf("We will start to erase all...\n");
     wait_for_space(); // Program waits here for space bar press
     printf("Erase all is started...\n\n");
-
-
 
 //  Erase All. It takes 1~3 min.
     n = IS25LP256_eraseAll(true);
     printf("Erase All: n=%d\n",n);
 
 /*
-//  Erase first 1 block 64KB.
+    Erase first 1 block 64KB.
     n = IS25LP256_erase64Block(0, true);
     printf("Erase Block 0 in 64kB: n=%d\n",n);
 */
@@ -268,10 +244,10 @@ int main() {
     dump(buf,256);
   
     printf("Erase all is done!!!\n\n");
+  
     wait_for_space(); // Program waits here for space bar press
 
-
-
+  
     // write BIN file in SPI Flash memory
     ssize_t read_bytes;
     uint32_t flash_address = 0; // Start address in SPI Flash where data will be written
@@ -279,7 +255,6 @@ int main() {
     uint16_t int_addr = 0;  //internal address within a sector (total 4096byte)
     uint8_t k=0;
   
-//   while ((read_bytes = fread(sector_buf, 1, SECTOR_SIZE, binaryFile)) > 0) {
     while ((read_bytes = fread(buf, 1, CHUNK_SIZE, binaryFile)) > 0) {
 
 //      dump(buf,256);
@@ -291,14 +266,16 @@ int main() {
       sector_no = flash_address>>12;
       
       n = IS25LP256_pageWrite(sector_no, int_addr, buf, CHUNK_SIZE);
-      printf("sector no=%08x  int_addr = %08x\nread bytes = %d   write bytes = %d\n", sector_no, int_addr, read_bytes, n-4);
+      printf("sector no=%08x  int_addr = %08x read bytes = %d  write bytes = %d\n", sector_no, int_addr, read_bytes, n-4);
 
 //      memset(buf,0,256);  // 임시 버퍼 클리어
 //      n =  IS25LP256_read(flash_address, buf, 256);
 //      dump(buf,256);
 
+      // increase internal address within Sector(4KB)
       int_addr += CHUNK_SIZE;
-
+      
+      // increase flash address (full address)
       flash_address += read_bytes;
 
     }
@@ -320,26 +297,6 @@ int main() {
     dump(buf,256);
   
 
-  /*
-  // 데이터 쓰기 테스트 START_ADDR+10부터 A~Z 쓰기
-    for (i=0; i < 26; i++) {
-      wdata[i]='A'+i; // 쓸 데이터 생성, A-Z, 총 26개
-    }
-    n =  IS25LP256_pageWrite(s_sect_no, 10, wdata, 26);
-    printf("page_write(%08x,10,%d,26): n=%d\n",s_addr,n);
-
-
-    // 데이터 쓰기 테스트
-    // Write data to Sector=0 Address=0
-    for (i=0; i < 10; i++) {
-      wdata[i]='0'+i; // 0-9     
-    }  
-    n =  IS25LP256_pageWrite(s_sect_no, 0, wdata, 10);
-    printf("page_write(%08x,0,%d,10): n=%d\n",s_addr,n);
-
-
-*/
-  
     // 상태 레지스터 가져오기
     // Get fron Status Register1
     buf[0] = IS25LP256_readStatusReg();
