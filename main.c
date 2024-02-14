@@ -1,12 +1,12 @@
 //
 // Write ROM file (*.BIN) into SPI Serial flash IS25LP256 by Raspberry PI 4B
 // Structure of IS25LP256 memory
-//    Total byte 33554432 (256Mbit)
+//    Total byte 33554432 (256Mbit, 32MB)
 //    Total memory address range (4byte=32bit) 0x00000000 - 0x1FFFFFFF
-//       Real usage
+//      * Real usage by FPGA (Artix7 100T) is 3.64MB (1/8 of total memory) 
 //    Total number of block 512 (64KB/block, 16sector/block)
 //    Total number of sector 8192 (4KB/sector)
-//    JEDEC ID: 9D-6019
+//    JEDEC ID: 9D-60 19
 //    Unique ID: different for individual chip
 //
 
@@ -226,26 +226,25 @@ int main() {
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
   
-    printf("We will start to erase all...\n");
+    printf("We will start to erase 4MB...\n");
     wait_for_space(); // Program waits here for space bar press
-    printf("Erase all is started...\n\n");
+    printf("Erase 4MB is started...\n\n");
 
 //  Erase All. It takes about 1 minute.
 //    n = IS25LP256_eraseAll(true);
 //    printf("Erase All: n=%d\n",n);
 
-    // Erase first 4MB using Block(64kB) earase for 4 times.
+    // Erase first 4MB using Block(64kB) earase for 64 times.
     for (ii=0; ii<64; ii++){
       n = IS25LP256_erase64Block(ii, true);
     }
-
   
     // Check if erase is done
     memset(buf,0,256);  // 임시 버퍼 클리어
     n =  IS25LP256_read (0, buf, 256);
     dump(buf,256);
   
-    printf("Erase all is done!!!\n\n");
+    printf("Erase 4MB is done!!!\n\n");
   
     wait_for_space(); // Program waits here for space bar press
 
@@ -269,7 +268,7 @@ int main() {
       
       n = IS25LP256_pageWrite(sector_no, int_addr, buf, CHUNK_SIZE);
 
-      if (sector_no%0x10==0){
+      if (sector_no%0x80==0){
         printf("sector no=%08x  int_addr = %08x read bytes = %d  write bytes = %d\n", sector_no, int_addr, read_bytes, n-4);
       }
 //      memset(buf,0,256);  // 임시 버퍼 클리어
