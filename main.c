@@ -229,7 +229,7 @@ int main() {
     wait_for_space(); // Program waits here for space bar press
     printf("Erase all is started...\n\n");
 
-//  Erase All. It takes 1~3 min.
+//  Erase All. It takes about 1 minute.
     n = IS25LP256_eraseAll(true);
     printf("Erase All: n=%d\n",n);
 
