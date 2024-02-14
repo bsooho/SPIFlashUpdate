@@ -129,7 +129,8 @@ int main() {
     uint8_t jedc[3];      // JEDEC-ID (3byte, MF7-MF0 ID15-ID8 ID7-ID0)
     uint8_t buf[CHUNK_SIZE];     // acquired data, 256byte
     uint8_t wdata[CHUNK_SIZE];   // data to be written, 256byte (Maximum 256byte by Input Page Write command)
-    uint8_t i;            // general variable
+    uint8_t i;            // general variable, unsigned 8bit
+    uint16_t ii;          // general variable, unsigned 16bit
     uint16_t n;           // return value or number of data read
   
     ssize_t bytes_read;
@@ -230,9 +231,15 @@ int main() {
     printf("Erase all is started...\n\n");
 
 //  Erase All. It takes about 1 minute.
-    n = IS25LP256_eraseAll(true);
-    printf("Erase All: n=%d\n",n);
+//    n = IS25LP256_eraseAll(true);
+//    printf("Erase All: n=%d\n",n);
 
+    // Erase first 4MB using Block(64kB) earase for 4 times.
+    for (ii=0; ii<4; ii++){
+      n = IS25LP256_erase64Block(ii*0x10000, true)
+    }
+
+  
 /*
     Erase first 1 block 64KB.
     n = IS25LP256_erase64Block(0, true);
