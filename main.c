@@ -190,7 +190,7 @@ int main() {
     // Test of GPIO 14 (High - Enable ROM Update)
     gpiod_line_set_value(line, 1); // Set line high (3.3V)
     printf("SPI Bypass Enabled!\n\n");
-    printf("Setup SPI0 channel\n\n");
+    printf("Setup SPI0 channel\n");
   
     // Start SPI channel 0 with pre-defined speed
     if (wiringPiSPISetupMode(SPI_CHANNEL, SPI_SPEED_HZ, SPI_MODE) < 0) {
