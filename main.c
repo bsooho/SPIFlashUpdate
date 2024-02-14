@@ -29,13 +29,13 @@
 #define GPIO_CHIP "gpiochip0"
 #define GPIO_PIN 14
 
-#define FILENAME "./FLASH_EN.bin"		// File name to be written to SPI Flash memory
-//#define FILENAME "./LED_Blink_Fast.bin"		// File name to be written to SPI Flash memory
+//#define FILENAME "./FLASH_EN.bin"		// File name to be written to SPI Flash memory
+#define FILENAME "./LED_Blink_Fast.bin"		// File name to be written to SPI Flash memory
 //#define FILENAME "./LED_Blink_Slow.bin"		// File name to be written to SPI Flash memory
 
 #define SPI_MODE  0          // SPI mode among 0, 1, 2 or 3
 #define SPI_DEVICE "/dev/spidev0.0"  // SPI channel 0
-#define SPI_SPEED_HZ 5000000	// SPI clock speed at 5MHz
+#define SPI_SPEED_HZ 10000000	// SPI clock speed at 5MHz
 #define CHUNK_SIZE 256			// unit amount per write operation
 #define SECTOR_SIZE 4096    // unit amount of one sector
 
