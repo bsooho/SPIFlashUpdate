@@ -41,8 +41,6 @@ sudo ./main
 |IS25LP256|32M|0x1FFFFFF|8192|1024|512|9D-60-19|
 
 - Normal 80MHz  clock operation   
-- Upto 166MHz clock operation  
-
-## IS25LP256   
+- Upto 166MHz clock operation
 
 ---
