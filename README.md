@@ -1,9 +1,7 @@
-# Raspberry PI CM4 - Write FPGA ROM file to Flash memeory of IS25LP256 through Artix7
+# Update Flash memory of FPGA by Raspberry PI CM4
 
-Access and write SPI Flash Memory IS25LP256 for Artix7 from RaspberryPi 4B and/or CM4
-
-Based on the below code.
-https://github.com/nopnop2002/Raspberry-W25Q64.git
+Access, erase and write ROM file for flash Memory IS25LP256 from RaspberryPi CM4
+Updated ROM will be effected on next power on.
 ---
 
 # Software requirement
