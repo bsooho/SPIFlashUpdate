@@ -236,6 +236,7 @@ int main() {
 //    printf("Erase All: n=%d\n",n);
 
     // Erase first 4MB using Block(64kB) earase for 64 times.
+    // It takes about 8 sec.
     for (ii=0; ii<64; ii++){
       n = IS25LP256_erase64Block(ii, true);
     }
