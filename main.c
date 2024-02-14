@@ -270,7 +270,7 @@ int main() {
       n = IS25LP256_pageWrite(sector_no, int_addr, buf, CHUNK_SIZE);
 
       if (flash_address%0x10000==0){
-        printf("sector no=%08x  int_addr = %08x read bytes = %d  write bytes = %d\n", sector_no, int_addr, read_bytes, n-4);
+        printf("sector no = %04x  int_addr = %04x read bytes = %d  write bytes = %d\n", sector_no, int_addr, read_bytes, n-4);
       }
 //      memset(buf,0,256);  // 임시 버퍼 클리어
 //      n =  IS25LP256_read(flash_address, buf, 256);
