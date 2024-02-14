@@ -34,10 +34,6 @@ sudo ./main
 
 ---
 
-# Wiring  
-
----
-
 # ISSI Flash memory information
 
 |Device|# of Bytes|Address range|# of 4K-Sectors|# of 32K-Blocks|# of 64K-Blocks|JEDEC ID|
