@@ -230,7 +230,7 @@ int main() {
     printf("Erase all is started...\n\n");
 
 //  Erase All. It takes about 1 minute.
-//    n = IS25LP256_eraseAll(true);
+    n = IS25LP256_eraseAll(true);
     printf("Erase All: n=%d\n",n);
 
 /*
