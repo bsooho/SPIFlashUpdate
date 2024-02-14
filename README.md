@@ -8,7 +8,12 @@ https://github.com/nopnop2002/Raspberry-W25Q64.git
 
 # Software requirement
 - WiringPi Library
-- gpiod Library
+  ```
+  git clone https://github.com/WiringPi/WiringPi
+  cd WiringPi
+  ./build
+  ```
+- libgpiod Library
 
  This project uses the wiringPiSPISetup() function to initialize SPI, and use /dev/spidev0.0.
  GPIO is handeled by gpiod
