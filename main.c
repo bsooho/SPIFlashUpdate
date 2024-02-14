@@ -206,7 +206,7 @@ int main() {
     IS25LP256_readManufacturer(jedc);
     printf("\nJEDEC ID : ");
     for (i=0; i< 3; i++) {
-      printf("%x ",jedc[i]);
+      printf("%X ",jedc[i]);
     }
     printf("\n");
     
@@ -214,7 +214,7 @@ int main() {
     IS25LP256_readUniqieID(buf);
     printf("Unique ID : ");
     for (i=0; i< 16; i++) {
-      printf("%x ",buf[i]);
+      printf("%X ",buf[i]);
     }
     printf("\n");
   
@@ -301,7 +301,7 @@ int main() {
     // 상태 레지스터 가져오기
     // Get fron Status Register1
     buf[0] = IS25LP256_readStatusReg();
-    printf("Status Register: %x\n",buf[0]);
+    printf("Status Register: %X\n",buf[0]);
 
     // Disable SPI0 Bypass lines
     gpiod_line_set_value(line, 0); // Set FLASH_EN (GPIO 14) line low (0V)
