@@ -286,7 +286,7 @@ int main() {
  
   
     // Read current stored data
-    // 256 byte from address s_addr
+    // 512 byte from address 0x00
     memset(buf,0,256);  // 임시 버퍼 클리어
     n =  IS25LP256_read(0, buf, 256);
     printf("Read Data: n=%d\n",n);
