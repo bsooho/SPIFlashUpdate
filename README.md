@@ -32,11 +32,6 @@ cd SPIFlashUpdate
 sudo make
 sudo ./main
 ```
-
----
-
-# Wiring  
-
 ---
 
 # ISSI IS25LP256 Flash memory information
