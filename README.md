@@ -8,6 +8,7 @@ https://github.com/nopnop2002/Raspberry-W25Q64.git
 ---
 
 # Software requirement
+ㅁㅁㅁㅁ
 - WiringPi Library
   ```
   git clone https://github.com/WiringPi/WiringPi
