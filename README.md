@@ -15,8 +15,8 @@ https://github.com/nopnop2002/Raspberry-W25Q64.git
   ./build
   ```
 ---
-  Please note that libgpiod library is used in this code.
-  Any other GPIO control code can be applicable.
+  Please note that libgpiod library is used in this code,
+  but any other GPIO control code can be applicable.
   What is required is only control GPIO 14 signal.
   When Flahs memory should be updated, High of GPIO 14 is everything during the operation.
 - libgpiod Library
