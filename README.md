@@ -14,9 +14,7 @@ https://github.com/nopnop2002/Raspberry-W25Q64.git
   cd WiringPi
   ./build
   ```
-
-
-
+---
   In this code, libgpiod library is used. However, any other GPIO control code can be applicable.
   What is required is only control GPIO 14 signal.
   When Flahs memory should be updated, High of GPIO 14 is everything during the operation.
