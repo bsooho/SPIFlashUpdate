@@ -220,7 +220,7 @@ int main() {
   
     // Read current stored data
     // 256 byte from address s_addr
-    memset(buf,0,256);  // 임시 버퍼 클리어
+    memset(buf,0,256);  // clear temporary buffer
     n =  IS25LP256_read(s_addr, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
@@ -233,14 +233,15 @@ int main() {
 //    n = IS25LP256_eraseAll(true);
 //    printf("Erase All: n=%d\n",n);
 
-    // Erase first 4MB using Block(64kB) earase for 64 times.
+    // Erase first 4MB using Block(64kB) erase for 64 times.
+    // It is because the size of binary file is 3,825,788 byte (3.64MB) which is less than 4MB.
     // It takes about 8 sec.
     for (ii=0; ii<64; ii++){
       n = IS25LP256_erase64Block(ii, true);
     }
   
     // Check if erase is done
-    memset(buf,0,256);  // 임시 버퍼 클리어
+    memset(buf,0,256);  // clear temporary buffer
     n =  IS25LP256_read (0, buf, 256);
     dump(buf,256);
   
@@ -271,7 +272,7 @@ int main() {
       if (flash_address%0x40000==0){
         printf("sector no = %04x  int_addr = %04x read bytes = %d  write bytes = %d\n", sector_no, int_addr, read_bytes, n-4);
       }
-//      memset(buf,0,256);  // 임시 버퍼 클리어
+//      memset(buf,0,256);  // clear temporary buffer
 //      n =  IS25LP256_read(flash_address, buf, 256);
 //      dump(buf,256);
 
@@ -289,18 +290,17 @@ int main() {
   
     // Read current stored data
     // 512 byte from address 0x00
-    memset(buf,0,256);  // 임시 버퍼 클리어
+    memset(buf,0,256);  // clear temporary buffer
     n =  IS25LP256_read(0, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
 
-    memset(buf,0,256);  // 임시 버퍼 클리어
+    memset(buf,0,256);  // clear temporary buffer
     n =  IS25LP256_read(256, buf, 256);
     printf("Read Data: n=%d\n",n);
     dump(buf,256);
   
 
-    // 상태 레지스터 가져오기
     // Get fron Status Register1
     buf[0] = IS25LP256_readStatusReg();
     printf("Status Register: %X\n",buf[0]);
