@@ -272,9 +272,6 @@ int main() {
       if (flash_address%0x40000==0){
         printf("sector no = %04x  int_addr = %04x read bytes = %d  write bytes = %d\n", sector_no, int_addr, read_bytes, n-4);
       }
-//      memset(buf,0,256);  // clear temporary buffer
-//      n =  IS25LP256_read(flash_address, buf, 256);
-//      dump(buf,256);
 
       // increase internal address within Sector(4KB)
       int_addr += CHUNK_SIZE;
