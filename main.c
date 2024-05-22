@@ -29,7 +29,7 @@
 #define GPIO_CHIP "gpiochip0"
 #define GPIO_PIN 14    // ROM_UPDATE_EN
 
-#define FILENAME "./FLASH_EN.bin"		// File name to be written to SPI Flash memory
+#define FILENAME "./ROM_files/SMI_v2_240510.bin"		// File name to be written to SPI Flash memory
 
 #define SPI_MODE  0          // SPI mode among 0, 1, 2 or 3
 #define SPI_DEVICE "/dev/spidev0.0"  // SPI channel 0
