@@ -28,10 +28,10 @@
 
 #define GPIO_CHIP "gpiochip0"
 #define GPIO_14_ROM_UPDATE_EN	14		// ROM_UPDATE_EN
-#define GPIO_07_SLEEP_EN		07		// SLEEP_EN
+#define GPIO_07_SLEEP_EN	07		// SLEEP_EN
 
 
-#define FILENAME "./SMI_v2.1_240612.bin"		// Binaray file name to be written to SPI Flash memory
+#define FILENAME "./SMI_v2.2_240613_1xSPI.bin"		// Binaray file name to be written to SPI Flash memory
 
 #define SPI_MODE  0          // SPI mode among 0, 1, 2 or 3
 #define SPI_DEVICE "/dev/spidev0.0"  // SPI channel 0
